@@ -1,0 +1,277 @@
+---
+import Base from '../layouts/Base.astro';
+import { SIGNUP } from '../consts';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+
+const pains = [
+  ['진척은 물어봐야 압니다', '목표는 엑셀에, 진행 상황은 각자의 머릿속에'],
+  ['팀원 상태는 감으로 봅니다', '1on1은 밀리고, 지친 팀원은 말이 없습니다'],
+  ['위에서 온 요청은 흩어져 있습니다', '메신저 · 메일 · 회의록 어딘가에'],
+  ['같은 말을 열 번 반복합니다', '“결론부터요” “숫자 기준일은요?”'],
+];
+const plans = [
+  { name: 'Starter', price: '29,000', members: '팀원 4명까지', points: ['목표 · 성과입력 · 1on1', 'AI 조기 경고 · 분기 전망', '팀원 업무플랫폼 · Sim.Box'] },
+  { name: 'Pro', price: '49,000', members: '팀원 10명까지', points: ['Starter의 모든 기능', '평가 초안 · 과제 히스토리', '컨설팅 노하우 카드'], best: true },
+  { name: 'Pro+', price: '79,000', members: '팀원 20명까지', points: ['Pro의 모든 기능', '큰 팀을 위한 넉넉한 AI 사용량'] },
+];
+const faqs = [
+  ['팀원도 요금을 내야 하나요?', '아니요. 팀장 한 명만 구독하고, 팀원은 무료로 초대합니다. 팀원은 성과입력 · 1on1 · 팀 방향 · Sim.Box를 그대로 씁니다.'],
+  ['체험 기간에는 어떤 기능을 쓸 수 있나요?', '14일 동안 가장 큰 요금제(Pro+)의 모든 기능을 씁니다. 체험이 끝나도 쌓인 기록은 지우지 않고, 요금제를 고르면 그대로 이어집니다.'],
+  ['팀원이 쓴 내용을 팀장이 다 볼 수 있나요?', '업무 기록은 팀장과 함께 보지만, 팀원 혼자 쓰는 Sim.Box는 팀장을 포함해 누구도 읽을 수 없습니다. 팀장에게는 이름 없는 팀 전체 경향만 보입니다.'],
+  ['AI가 엉뚱한 말을 지어내지는 않나요?', 'ATEAM의 분석은 팀이 실제로 남긴 목표 · 업무 · 1on1 · 결과물 기록에 근거합니다. 기록이 부족하면 부족하다고 말하고, 근거가 된 기록을 함께 보여 줍니다.'],
+  ['어떤 팀에 맞나요?', '팀원 3~20명 규모로 목표와 결과물을 다루는 팀이면 직무와 상관없이 쓸 수 있습니다. 마케팅 · 기획 · 영업 · 개발 · 경영지원 팀장이 주로 씁니다.'],
+];
+---
+<Base dark>
+  <!-- 히어로: 큰 제목 두 장이 번갈아 넘어간다 (가운데 정렬) -->
+  <section class="relative bg-ink text-white overflow-hidden">
+    <div aria-hidden class="absolute left-1/2 -translate-x-1/2 -top-56 w-[900px] h-[620px] rounded-full bg-indigo-600/30 blur-[140px]"></div>
+    <div class="relative max-w-5xl mx-auto px-5 pt-24 pb-28 md:pt-36 md:pb-40 text-center flex flex-col items-center">
+      <p class="text-base md:text-xl font-semibold tracking-wide text-indigo-300">팀장님을 위한 개인용 AI Solution</p>
+      <div class="hero-slides mt-6 grid w-full" data-hero>
+        <h1 class="hero-slide is-on text-[40px] sm:text-[56px] md:text-[76px] leading-[1.15] font-black tracking-tight">팀 운영을 위한 슈퍼에이전트<br /><span class="text-indigo-300">ATEAM</span></h1>
+        <h1 class="hero-slide text-[40px] sm:text-[56px] md:text-[76px] leading-[1.15] font-black tracking-tight" aria-hidden="true">자율주행 엔진이<br /><span class="text-indigo-300">S급 팀</span>을 만들어줍니다</h1>
+        <h1 class="hero-slide text-[40px] sm:text-[56px] md:text-[76px] leading-[1.15] font-black tracking-tight" aria-hidden="true">팀 운영,<br />더 이상<br class="sm:hidden" /> <span class="text-indigo-300 whitespace-nowrap">혼자가 아닙니다</span></h1>
+      </div>
+      <div class="mt-7 flex items-center gap-2" role="tablist" aria-label="제목 넘기기">
+        <button type="button" data-dot="0" class="hero-dot is-on" aria-label="첫 번째 제목"></button>
+        <button type="button" data-dot="1" class="hero-dot" aria-label="두 번째 제목"></button>
+        <button type="button" data-dot="2" class="hero-dot" aria-label="세 번째 제목"></button>
+      </div>
+      <p class="mt-8 text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-3xl">마스터 컨설턴트가 20년간 쌓은<br class="sm:hidden" /> 팀 운영 노하우를 집대성했습니다.<br />놓친 것은 챙기고,<br class="sm:hidden" /> 보이지 않던 데이터에서 예리한 인사이트까지.<br /><b class="inline-block mt-2 text-white font-bold">이제 슈퍼 파트너와 함께하세요.</b></p>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <a href={SIGNUP} class="inline-flex items-center rounded-xl bg-indigo-500 hover:bg-indigo-400 px-7 py-4 text-base md:text-lg font-bold">14일 무료로 시작하기 →</a>
+        <a href="#features" class="inline-flex items-center rounded-xl px-6 py-4 text-base md:text-lg font-semibold text-slate-200 ring-1 ring-white/15 hover:bg-white/5">무엇을 해 주나요?</a>
+      </div>
+      <p class="mt-5 text-sm text-slate-500">팀장 1명 구독 · 팀원은 무료 초대</p>
+    </div>
+  </section>
+  <style>
+    .hero-slides > .hero-slide { grid-area: 1 / 1; margin: 0; opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .hero-slides > .hero-slide.is-on { opacity: 1; transform: none; }
+    .hero-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.25); transition: width .3s, background .3s; }
+    .hero-dot.is-on { width: 28px; background: #818cf8; }
+    @media (prefers-reduced-motion: reduce) { .hero-slides > .hero-slide { transition: none; transform: none; } }
+  </style>
+  <script>
+    const box = document.querySelector('[data-hero]');
+    if (box) {
+      const slides = [...box.querySelectorAll('.hero-slide')];
+      const dots = [...document.querySelectorAll('.hero-dot')];
+      let i = 0; let t: ReturnType<typeof setInterval>;
+      const show = (n: number) => {
+        i = n % slides.length;
+        slides.forEach((s, k) => { s.classList.toggle('is-on', k === i); s.setAttribute('aria-hidden', String(k !== i)); });
+        dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
+      };
+      const start = () => { clearInterval(t); t = setInterval(() => show(i + 1), 4000); };
+      dots.forEach((d, k) => d.addEventListener('click', () => { show(k); start(); }));
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) start();
+    }
+  </script>
+
+  <!-- 문제 -->
+  <section class="bg-slate-50">
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28">
+      <p class="text-sm font-bold text-indigo-600">팀장의 현실</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">팀 운영의 모든 걸 혼자 감당하기,<br class="hidden md:block" /> 벅차지 않으세요?</h2>
+      <div class="mt-12 grid gap-4 md:grid-cols-2">
+        {pains.map(([t, d], i) => (
+          <div class="rounded-2xl bg-white ring-1 ring-slate-200 p-6 flex gap-5">
+            <span class="text-lg font-black text-indigo-600 w-7 shrink-0">0{i + 1}</span>
+            <div><b class="block text-lg font-bold">{t}</b><span class="block mt-1 text-slate-500">{d}</span></div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-10 rounded-2xl bg-ink text-white p-7 md:p-9 grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+        <p class="text-lg md:text-xl leading-relaxed text-slate-300">흩어진 기록을 이어 붙이는 곳이 팀장 한 사람뿐이라서, 결국<br class="hidden md:block" /> <b class="text-white">늦게 알고, 못 보고, 놓치게 됩니다.</b></p>
+        <a href="#features" class="inline-flex justify-center rounded-xl bg-white text-ink px-5 py-3 font-bold hover:bg-slate-100">ATEAM이 나눠 드는 것 ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 기능 4 -->
+  <section id="features" class="scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28 space-y-24">
+      <div class="max-w-2xl">
+        <p class="text-sm font-bold text-indigo-600">ATEAM이 해 주는 일</p>
+        <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">팀이 남긴 기록을 매주 읽고,<br />팀장이 알아야 할 것만 꺼내 줍니다</h2>
+      </div>
+
+      <!-- ① -->
+      <div class="grid gap-10 lg:grid-cols-2 items-center">
+        <div>
+          <span class="text-sm font-black text-indigo-600">01 · 조기 경고</span>
+          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">문제가 커지기 전에 먼저 알려 줘요</h3>
+          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">업무 · 1on1 · 컨디션 기록에서 위험 신호를 골라 냅니다. 마감이 밀릴 과제, 꺾이기 시작한 팀원, 윗분이 조만간 물어볼 문제까지.</p>
+        </div>
+        <div class="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-6 space-y-3">
+          <div class="rounded-2xl bg-white ring-1 ring-rose-100 p-4"><span class="text-xs font-bold text-rose-700 bg-rose-50 rounded-full px-2.5 py-1">업무 리스크</span><p class="mt-2.5 font-medium">런칭 캠페인이 이대로면 마감보다 늦어질 가능성이 높아요</p></div>
+          <div class="rounded-2xl bg-white ring-1 ring-orange-100 p-4"><span class="text-xs font-bold text-orange-800 bg-orange-50 rounded-full px-2.5 py-1">팀원 신호</span><p class="mt-2.5 font-medium">3주째 컨디션이 내려가는 팀원이 있어요 — 1on1을 권해요</p></div>
+          <div class="rounded-2xl bg-white ring-1 ring-indigo-100 p-4"><span class="text-xs font-bold text-indigo-700 bg-indigo-50 rounded-full px-2.5 py-1">위에서 볼 것</span><p class="mt-2.5 font-medium">다음 주 임원 보고 전에 파이프라인 현황이 비어 있어요</p></div>
+          <p class="text-[11px] text-slate-400">화면 예시</p>
+        </div>
+      </div>
+
+      <!-- ② -->
+      <div class="grid gap-10 lg:grid-cols-2 items-center">
+        <div class="lg:order-2">
+          <span class="text-sm font-black text-indigo-600">02 · 숨은 패턴</span>
+          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">나도 몰랐던 패턴을 찾아 줘요</h3>
+          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">일이 밀리는 진짜 이유, 성과를 끌어내리는 숨은 원인, 나도 모르게 몇몇 팀원에게만 시간을 쓰는 습관까지 보여 줍니다.</p>
+        </div>
+        <div class="lg:order-1 rounded-3xl bg-ink text-white p-6">
+          <span class="text-xs text-slate-400">최근 4주 팀장 접점</span>
+          <div class="mt-4 space-y-3">
+            {[['팀원 A', 92, 'bg-indigo-500'], ['팀원 B', 74, 'bg-indigo-500'], ['팀원 C', 22, 'bg-indigo-900'], ['팀원 D', 14, 'bg-indigo-900'], ['팀원 E', 4, 'bg-rose-400']].map(([n, w, c]) => (
+              <div class="flex items-center gap-3"><span class="w-14 text-sm text-slate-300">{n}</span><div class="flex-1 h-3 rounded-full bg-line"><div class={`h-3 rounded-full ${c}`} style={`width:${w}%`}></div></div></div>
+            ))}
+          </div>
+          <p class="mt-5 pt-4 border-t border-line font-bold">관심이 두 사람에게 몰려 있어요. <span class="text-rose-300">한 명은 4주째 거의 대화가 없었어요.</span></p>
+          <p class="mt-3 text-[11px] text-slate-500">화면 예시</p>
+        </div>
+      </div>
+
+      <!-- ③ -->
+      <div class="grid gap-10 lg:grid-cols-2 items-center">
+        <div>
+          <span class="text-sm font-black text-indigo-600">03 · 전망</span>
+          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">분기 말을 미리 보여 줘요</h3>
+          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">목표별 달성 가능성과 마감 전망, 낙관 · 비관 범위, 그리고 무엇을 바꾸면 결과가 달라지는지까지 알려 줍니다.</p>
+        </div>
+        <div class="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-6 space-y-5">
+          {[['신제품 런칭 캠페인', '달성 가능', 82, 'bg-emerald-500', 'text-emerald-700'], ['제휴 채널 신규 고객', '아슬아슬', 64, 'bg-amber-400', 'text-amber-700'], ['운영 효율화', '미달 위험', 41, 'bg-rose-500', 'text-rose-700']].map(([n, s, w, c, t]) => (
+            <div><div class="flex justify-between text-[15px]"><b>{n}</b><span class={`font-bold ${t}`}>{s}</span></div><div class="mt-2 h-3 rounded-full bg-slate-200"><div class={`h-3 rounded-full ${c}`} style={`width:${w}%`}></div></div></div>
+          ))}
+          <p class="rounded-xl bg-indigo-50 px-4 py-3 text-[15px]"><b class="text-indigo-800">바꾸면 달라지는 것</b> · 보고 체계 과제를 한 명 더 맡기면 분기 안에 끝낼 수 있어요</p>
+          <p class="text-[11px] text-slate-400">화면 예시</p>
+        </div>
+      </div>
+
+      <!-- ④ -->
+      <div class="grid gap-10 lg:grid-cols-2 items-center">
+        <div class="lg:order-2">
+          <span class="text-sm font-black text-indigo-600">04 · AUTOPILOT</span>
+          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">놓친 것은 알아서 챙겨 줘요</h3>
+          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">결정할 것, 위에서 온 요청, 챙겨야 할 팀원을 이번 주 할 일로 정리합니다. 칭찬 · 독려 메시지 초안까지 준비해 두니 누르기만 하면 됩니다.</p>
+        </div>
+        <div class="lg:order-1 rounded-3xl bg-ink text-white p-6">
+          <span class="text-xs text-slate-400">이번 주 할 일 · 20개 안팎</span>
+          <ul class="mt-3 divide-y divide-line">
+            {['결정을 기다리는 일 2건', '위에서 온 요청 미회신 1건', '2주 넘게 1on1이 없었던 팀원', '칭찬할 타이밍을 놓치기 직전'].map((t, i) => (
+              <li class="flex items-center gap-3 py-3"><span class="w-7 h-7 rounded-full bg-indigo-600 text-sm font-black flex items-center justify-center">{i + 1}</span><span class="font-semibold">{t}</span><span class="ml-auto text-xs text-indigo-200">바로 하기 →</span></li>
+            ))}
+          </ul>
+          <p class="mt-2 text-[11px] text-slate-500">화면 예시</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 팀원 쪽 -->
+  <section id="members" class="bg-slate-50 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28">
+      <p class="text-sm font-bold text-indigo-600">팀원 쪽에서는</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">같은 말을 열 번 하지 않아도 돼요</h2>
+      <p class="mt-4 text-lg text-slate-600">팀원은 무료로 초대되어, 팀의 방향을 보고 올리기 전에 스스로 다듬습니다.</p>
+      <div class="mt-12 grid gap-5 md:grid-cols-2">
+        <div class="rounded-3xl bg-white ring-1 ring-slate-200 p-7">
+          <b class="text-xl font-black">팀 방향</b>
+          <p class="mt-3 text-slate-600 leading-relaxed">이번 분기 목표와 팀장님이 반복해서 강조한 기준을 ATEAM이 한 장으로 정리합니다. 팀장이 따로 쓰지 않아도 됩니다.</p>
+          <div class="mt-5 flex flex-wrap gap-2">{['결론은 첫 문단에', '숫자엔 기준일', '유관부서와 미리'].map((t) => <span class="text-sm font-bold rounded-full bg-indigo-50 text-indigo-700 px-3 py-1.5">{t}</span>)}</div>
+        </div>
+        <div class="rounded-3xl bg-white ring-1 ring-slate-200 p-7">
+          <b class="text-xl font-black">Sim.Box</b>
+          <p class="mt-3 text-slate-600 leading-relaxed">보고서를 올리기 전에 “팀장님이라면 뭐라고 하실까?”를 미리 시뮬레이션합니다. 예상 질문과 보완할 점을 짚어 줍니다.</p>
+          <p class="mt-5 text-sm text-slate-500">여기서 쓴 내용은 팀원 본인만 볼 수 있어요</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 쌓일수록 -->
+  <section>
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-24 grid gap-10 md:grid-cols-[1fr_1.4fr] items-center">
+      <div>
+        <p class="text-sm font-bold text-indigo-600">일할수록 쌓이고, 쌓일수록 보입니다</p>
+        <h2 class="mt-3 text-2xl md:text-[30px] leading-tight font-black tracking-tight font-mono">WORK → LAYER<br />→ INSIGHT</h2>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {[['WORK', '목표를 세우고, 결과물을 올리고, 1on1을 합니다. 평소 하던 일 그대로.'], ['LAYER', '기록이 사람 · 목표 · 결정의 맥락으로 겹겹이 쌓입니다.'], ['INSIGHT', '쌓일수록 경고와 전망이 더 깊고 정확해집니다.']].map(([t, d]) => (
+          <div class="rounded-2xl ring-1 ring-slate-200 p-5"><b class="font-mono text-sm tracking-widest text-indigo-600">{t}</b><p class="mt-2 text-[15px] text-slate-600 leading-relaxed">{d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 요금 -->
+  <section id="pricing" class="bg-slate-50 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28">
+      <div class="text-center max-w-xl mx-auto">
+        <p class="text-sm font-bold text-indigo-600">요금</p>
+        <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">팀장 한 명만 구독하세요</h2>
+        <p class="mt-4 text-slate-600">팀원은 무료로 초대합니다. 14일 동안 모든 기능을 먼저 써 보세요.</p>
+      </div>
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {plans.map((p) => (
+          <div class={`rounded-3xl p-7 flex flex-col ${p.best ? 'bg-ink text-white ring-2 ring-indigo-500' : 'bg-white ring-1 ring-slate-200'}`}>
+            <div class="flex items-center gap-2"><b class="text-xl font-black">{p.name}</b>{p.best && <span class="text-xs font-bold rounded-full bg-indigo-500 px-2 py-0.5">추천</span>}</div>
+            <p class={`mt-1 text-sm ${p.best ? 'text-slate-400' : 'text-slate-500'}`}>{p.members}</p>
+            <p class="mt-6"><span class="text-4xl font-black tracking-tight">₩{p.price}</span><span class={`text-sm ${p.best ? 'text-slate-400' : 'text-slate-500'}`}> / 월</span></p>
+            <ul class="mt-6 space-y-2.5 text-[15px] flex-1">{p.points.map((x) => <li class="flex gap-2"><span class="text-indigo-500">✓</span>{x}</li>)}</ul>
+            <a href={SIGNUP} class={`mt-8 inline-flex justify-center rounded-xl py-3.5 font-bold ${p.best ? 'bg-indigo-500 hover:bg-indigo-400' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>14일 무료 체험</a>
+          </div>
+        ))}
+      </div>
+      <p class="mt-6 text-center text-sm text-slate-500">VAT 별도 · 연간 결제 시 2개월 무료</p>
+    </div>
+  </section>
+
+  <!-- 아티클 -->
+  {articles.length > 0 && (
+    <section>
+      <div class="max-w-6xl mx-auto px-5 py-20 md:py-24">
+        <div class="flex items-end justify-between gap-4">
+          <div><p class="text-sm font-bold text-indigo-600">팀장 아티클</p><h2 class="mt-3 text-3xl md:text-[38px] leading-tight font-black tracking-tight">오늘 바로 써먹는 팀 운영</h2></div>
+          <a href="/articles/" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 shrink-0">전체 보기 →</a>
+        </div>
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {articles.map((a) => (
+            <a href={`/articles/${a.id}/`} class="group rounded-3xl ring-1 ring-slate-200 p-6 hover:ring-indigo-300 hover:shadow-lg transition">
+              <span class="text-xs font-bold text-indigo-600">{a.data.category}</span>
+              <h3 class="mt-2 text-lg font-bold leading-snug group-hover:text-indigo-700">{a.data.title}</h3>
+              <p class="mt-2 text-[15px] text-slate-500 leading-relaxed line-clamp-3">{a.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- FAQ -->
+  <section class="bg-slate-50">
+    <div class="max-w-3xl mx-auto px-5 py-20 md:py-24">
+      <h2 class="text-3xl md:text-[38px] font-black tracking-tight text-center">자주 묻는 질문</h2>
+      <div class="mt-10 divide-y divide-slate-200 border-y border-slate-200">
+        {faqs.map(([q, a]) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-bold">{q}<span class="text-slate-400 group-open:rotate-45 transition text-2xl leading-none">+</span></summary>
+            <p class="mt-3 text-slate-600 leading-relaxed">{a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 마지막 CTA -->
+  <section class="relative bg-ink text-white overflow-hidden">
+    <div aria-hidden class="absolute -left-40 -bottom-40 w-[600px] h-[600px] rounded-full bg-indigo-600/25 blur-[120px]"></div>
+    <div class="relative max-w-6xl mx-auto px-5 py-24 text-center">
+      <h2 class="text-3xl md:text-[48px] leading-tight font-black tracking-tight">팀 운영, 이제 혼자 하지 마세요</h2>
+      <p class="mt-5 text-lg text-slate-300">14일 동안 모든 기능을 무료로. 팀원은 무료로 초대하세요.</p>
+      <a href={SIGNUP} class="mt-9 inline-flex rounded-xl bg-indigo-500 hover:bg-indigo-400 px-7 py-4 text-lg font-bold">14일 무료로 시작하기 →</a>
+    </div>
+  </section>
+</Base>

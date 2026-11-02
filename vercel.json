@@ -1,0 +1,8 @@
+{
+  "redirects": [
+    { "source": "/login", "destination": "https://app.leada.team/login", "permanent": false },
+    { "source": "/invite/:path*", "destination": "https://app.leada.team/invite/:path*", "permanent": false },
+    { "source": "/reset-password", "destination": "https://app.leada.team/reset-password", "permanent": false },
+    { "source": "/onboarding", "destination": "https://app.leada.team/onboarding", "permanent": false }
+  ]
+}

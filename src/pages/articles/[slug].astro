@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { SIGNUP } from '../../consts';
+export async function getStaticPaths() {
+  const list = await getCollection('articles');
+  return list.map((a) => ({ params: { slug: a.id }, props: { a } }));
+}
+const { a } = Astro.props;
+const { Content } = await render(a);
+const others = (await getCollection('articles')).filter((x) => x.id !== a.id).sort((x, y) => +y.data.date - +x.data.date).slice(0, 2);
+const fmt = (d: Date) => `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: a.data.title, description: a.data.description, datePublished: a.data.date.toISOString(), inLanguage: 'ko', publisher: { '@type': 'Organization', name: 'ATEAM' } };
+---
+<Base title={a.data.title} description={a.data.description} article>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <article class="max-w-[720px] mx-auto px-5 pt-14 pb-10">
+    <a href="/articles/" class="text-sm font-semibold text-slate-500 hover:text-indigo-700">← 팀장 아티클</a>
+    <div class="mt-8 text-sm font-bold text-indigo-600">{a.data.category} <span class="text-slate-400 font-medium ml-1">{fmt(a.data.date)}</span></div>
+    <h1 class="mt-3 text-[30px] md:text-[40px] font-black tracking-tight leading-[1.25]">{a.data.title}</h1>
+    <p class="mt-4 text-lg text-slate-500 leading-relaxed">{a.data.description}</p>
+    <div class="prose-ateam mt-10"><Content /></div>
+    {a.data.sources.length > 0 && (
+      <div class="mt-12 pt-6 border-t border-slate-200 text-sm text-slate-500"><b class="text-slate-700">참고</b><ul class="mt-2 space-y-1">{a.data.sources.map((s) => <li>· {s}</li>)}</ul></div>
+    )}
+    <div class="mt-12 rounded-3xl bg-ink text-white p-7 md:p-8">
+      <p class="text-sm font-bold text-indigo-300">ATEAM</p>
+      <p class="mt-2 text-xl md:text-2xl font-black leading-snug">이걸 매주 혼자 챙기기 벅차다면</p>
+      <p class="mt-3 text-slate-300 leading-relaxed">ATEAM이 팀의 목표 · 업무 · 1on1 기록을 매주 읽고, 팀장이 지금 챙길 것을 골라 드립니다. 팀장 1명 구독, 팀원은 무료 초대.</p>
+      <a href={SIGNUP} class="mt-6 inline-flex rounded-xl bg-indigo-500 hover:bg-indigo-400 px-5 py-3 font-bold">14일 무료로 시작하기 →</a>
+    </div>
+  </article>
+  {others.length > 0 && (
+    <section class="max-w-[720px] mx-auto px-5 pb-20">
+      <h2 class="text-lg font-black">다른 아티클</h2>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">{others.map((o) => (
+        <a href={`/articles/${o.id}/`} class="rounded-2xl ring-1 ring-slate-200 p-5 hover:ring-indigo-300"><span class="text-xs font-bold text-indigo-600">{o.data.category}</span><b class="block mt-1.5 leading-snug">{o.data.title}</b></a>
+      ))}</div>
+    </section>
+  )}
+</Base>
+<style is:global>
+  .prose-ateam { font-size: 17.5px; line-height: 1.85; color: #1e293b; }
+  .prose-ateam > * + * { margin-top: 1.15em; }
+  .prose-ateam h2 { font-size: 1.45em; font-weight: 900; letter-spacing: -0.02em; line-height: 1.35; margin-top: 2.2em; color: #0f172a; }
+  .prose-ateam h3 { font-size: 1.15em; font-weight: 800; margin-top: 1.8em; color: #0f172a; }
+  .prose-ateam strong { color: #0f172a; }
+  .prose-ateam ul, .prose-ateam ol { padding-left: 1.3em; }
+  .prose-ateam ul { list-style: disc; } .prose-ateam ol { list-style: decimal; }
+  .prose-ateam li + li { margin-top: 0.4em; }
+  .prose-ateam blockquote { border-radius: 16px; background: #f1f5f9; padding: 1em 1.2em; color: #334155; }
+  .prose-ateam blockquote p + p { margin-top: 0.5em; }
+  .prose-ateam table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+  .prose-ateam th, .prose-ateam td { border-bottom: 1px solid #e2e8f0; padding: 0.6em 0.5em; text-align: left; vertical-align: top; }
+  .prose-ateam th { color: #475569; font-weight: 700; }
+  .prose-ateam a { color: #4f46e5; text-decoration: underline; text-underline-offset: 3px; }
+</style>

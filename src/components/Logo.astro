@@ -1,0 +1,10 @@
+---
+// 인디고 블록 안의 지렛대 마크 + ATEAM
+const { size = 30, word = true, cls = '' } = Astro.props;
+---
+<span class={`inline-flex items-center gap-2.5 ${cls}`}>
+  <span class="inline-flex items-center justify-center rounded-[28%] bg-indigo-600 text-white shrink-0" style={`width:${size}px;height:${size}px`}>
+    <svg viewBox="0 0 40 40" class="w-[82%] h-[82%]" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 33 L34 7.8"/><path d="M23 17.7 V33"/></svg>
+  </span>
+  {word && <span class="font-black tracking-tight text-[17px]">ATEAM</span>}
+</span>
