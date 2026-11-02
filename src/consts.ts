@@ -2,3 +2,4 @@
 export const APP = (import.meta.env.PUBLIC_APP_URL as string | undefined)?.replace(/\/$/, '') || 'https://app.leada.team';
 export const SIGNUP = `${APP}/login?mode=signup`;
 export const LOGIN = `${APP}/login`;
+export const DEMO = `${APP}/demo`;
