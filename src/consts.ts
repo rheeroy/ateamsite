@@ -11,7 +11,7 @@ export const BIZ = {
 };
 export const EFFECTIVE = '2026년 11월 6일';
 
-// 요금 (VAT 별도 정가) — 앱의 plans 표와 같게 (supabase/migrations/…_plans_price.sql)
+// 요금 (VAT 포함 최종 결제금액) — 앱의 plans 표와 같게 (supabase/migrations/…_plans_price.sql)
 export const PLANS = [
   { id: 'starter', name: 'Starter', month: 29000, year: 290000, members: '팀원 4명까지', points: ['목표 · 성과입력 · 1on1', 'AI 조기 경고 · 분기 전망', '팀원 업무플랫폼 · Sim.Box', '월 프리미엄 AI 크레딧 30'] },
   { id: 'pro', name: 'Pro', month: 49000, year: 490000, members: '팀원 10명까지', points: ['Starter의 모든 기능', '평가 초안 · 과제 히스토리', '컨설팅 노하우 카드', '월 프리미엄 AI 크레딧 100'], best: true },
@@ -19,4 +19,5 @@ export const PLANS = [
 ];
 export const TOPUPS = [{ credits: 100, price: 6900 }, { credits: 300, price: 19900 }];
 export const won = (n: number) => n.toLocaleString('ko-KR');
-export const vat = (n: number) => Math.round(n * 1.1);
+/** VAT 포함 금액의 공급가 */
+export const supply = (n: number) => Math.round(n / 1.1);
