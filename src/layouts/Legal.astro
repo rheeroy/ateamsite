@@ -1,0 +1,31 @@
+---
+// 약관 · 개인정보처리방침 · 환불정책 — 마크다운 페이지 공용 틀
+import Base from './Base.astro';
+const { frontmatter } = Astro.props;
+---
+<Base title={frontmatter.title} description={frontmatter.description}>
+  <article class="max-w-[760px] mx-auto px-5 pt-14 pb-20">
+    <h1 class="text-[30px] md:text-[38px] font-black tracking-tight">{frontmatter.title}</h1>
+    <p class="mt-2 text-sm text-slate-500">시행일 {frontmatter.effective}</p>
+    <nav class="mt-6 flex flex-wrap gap-2 text-sm">
+      <a href="/pricing" class="rounded-full ring-1 ring-slate-200 px-3 py-1 hover:ring-indigo-300">요금 안내</a>
+      <a href="/terms" class="rounded-full ring-1 ring-slate-200 px-3 py-1 hover:ring-indigo-300">이용약관</a>
+      <a href="/refund" class="rounded-full ring-1 ring-slate-200 px-3 py-1 hover:ring-indigo-300">환불정책</a>
+      <a href="/privacy" class="rounded-full ring-1 ring-slate-200 px-3 py-1 hover:ring-indigo-300">개인정보처리방침</a>
+    </nav>
+    <div class="legal mt-10"><slot /></div>
+  </article>
+</Base>
+<style is:global>
+  .legal { font-size: 15.5px; line-height: 1.85; color: #1e293b; }
+  .legal > * + * { margin-top: 0.9em; }
+  .legal h2 { font-size: 1.2em; font-weight: 800; margin-top: 2.2em; color: #0f172a; }
+  .legal h3 { font-size: 1.05em; font-weight: 700; margin-top: 1.4em; color: #0f172a; }
+  .legal strong { color: #0f172a; }
+  .legal ul, .legal ol { padding-left: 1.3em; } .legal ul { list-style: disc; } .legal ol { list-style: decimal; }
+  .legal li + li { margin-top: 0.3em; }
+  .legal table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .legal th, .legal td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; vertical-align: top; }
+  .legal th { background: #f8fafc; font-weight: 700; }
+  .legal a { color: #4f46e5; text-decoration: underline; }
+</style>
