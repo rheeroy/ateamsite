@@ -6,10 +6,10 @@ import { getCollection } from 'astro:content';
 const articles = (await getCollection('articles')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
 
 const pains = [
-  ['진척은 물어봐야 압니다', '목표는 엑셀에, 진행 상황은 각자의 머릿속에'],
-  ['팀원 상태는 감으로 봅니다', '1on1은 밀리고, 지친 팀원은 말이 없습니다'],
-  ['위에서 온 요청은 흩어져 있습니다', '메신저 · 메일 · 회의록 어딘가에'],
-  ['같은 말을 열 번 반복합니다', '“결론부터요” “숫자 기준일은요?”'],
+  ['같은 피드백을 매번 반복합니다', '“결론부터요” “숫자 기준일은요?” 결과물마다 같은 말을 하고, 기준은 금세 다시 흐려집니다.', '팀장님 기준으로 먼저 피드백하고, 반복해서 맞춰 줍니다'],
+  ['일이 너무 많아 팀원까지 챙길 여력이 없습니다', '보고 · 회의 · 결재에 치이다 보면 1on1은 밀리고, 칭찬할 타이밍은 지나가고, 지친 팀원은 말이 없습니다.', '이번 주 팀원별로 해야 할 액션을 골라 바로 할 수 있게 준비해 둡니다'],
+  ['결정할 일이 쌓여 팀이 멈춥니다', '메신저 · 회의 · 위에서 온 지시 속에 흩어진 “결정해 주세요”를 다 챙기기 어렵습니다.', '빨리 결정해야 할 것부터 선택지와 근거까지 정리합니다'],
+  ['문제는 터지고 나서야 압니다', '밀리는 과제, 꺾이는 컨디션은 보고가 올라올 때쯤이면 이미 늦습니다.', '기록에서 위험 신호를 먼저 찾아 미리 알려 줍니다'],
 ];
 const plans = [
   { name: 'Starter', price: '29,000', members: '팀원 4명까지', points: ['목표 · 성과입력 · 1on1', 'AI 조기 경고 · 분기 전망', '팀원 업무플랫폼 · Sim.Box'] },
@@ -23,12 +23,39 @@ const faqs = [
   ['AI가 엉뚱한 말을 지어내지는 않나요?', 'ATEAM의 분석은 팀이 실제로 남긴 목표 · 업무 · 1on1 · 결과물 기록에 근거합니다. 기록이 부족하면 부족하다고 말하고, 근거가 된 기록을 함께 보여 줍니다.'],
   ['어떤 팀에 맞나요?', '팀원 3~20명 규모로 목표와 결과물을 다루는 팀이면 직무와 상관없이 쓸 수 있습니다. 마케팅 · 기획 · 영업 · 개발 · 경영지원 팀장이 주로 씁니다.'],
 ];
+// 이렇게 사용하세요 — 실제 화면(데모 팀 데이터로 캡처: public/shots)
+const I = {
+  dash: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+  goal: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  work: '<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  people: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  split: '<path d="M16 3h5v5M8 3H3v5M12 22v-8.3a4 4 0 0 0-1.17-2.83L3 3M21 3l-7.83 7.83"/>',
+  history: '<path d="M16 22h2a2 2 0 0 0 2-2V8l-5-5H6a2 2 0 0 0-2 2v3"/><circle cx="8" cy="16" r="6"/><path d="M9.5 17.5 8 16.25V14"/>',
+  exec: '<circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/><path d="m12 11 1.2 2.4-1.2 5-1.2-5z"/>',
+  eval: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+};
+const uses = [
+  { k: 'dash', t: '대시보드 · 데일리 브리핑', img: 'home', b: ['매일 아침 ATEAM이 팀 기록을 읽고 오늘 챙길 것만 골라 정리합니다.', '팀 성과 · 의사결정 · 리스크 · 업무플랫폼 · 팀원관리 · 조직 소식을 한 화면에서 봅니다.', '숫자마다 근거가 된 기록으로 바로 들어갈 수 있습니다.'] },
+  { k: 'goal', t: '팀목표 · 성과입력', img: 'goals', b: ['목표 → 과제 → 할 일을 한 트리로 세우고, 담당자 · 일정 · 진척을 타임라인으로 봅니다.', '팀원이 성과입력으로 올린 진척은 승인하면 목표에 바로 반영됩니다.', '목표별 달성 가능성과 마감 전망을 AI가 매주 다시 계산합니다.'] },
+  { k: 'work', t: '업무플랫폼', img: 'work', b: ['팀원별 · 그룹별 스페이스에서 결과물 · 의견 요청 · 보고를 주고받습니다.', 'ATEAM이 먼저 읽고, 팀장이 꼭 봐야 할 것부터 골라 올려 줍니다.', '파일을 올리면 버전이 쌓이고, 과제 태그로 과제별 흐름이 정리됩니다.'] },
+  { k: 'people', t: '팀원관리', img: 'person', b: ['컨디션 · 이탈 가능성 · 업무 부하 · 활동 · 1on1 공백을 신호등으로 한눈에 봅니다.', '이번 주 누구에게 1on1 · 칭찬 · 독려 · 지원이 필요한지 AI가 추천합니다.', '활동 · 부하 흐름으로 과부하와 의욕 저하를 일찍 알아챕니다.'] },
+  { k: 'split', t: '의사결정', img: 'decide', b: ['목표 · 팀 대화 · 위에서 온 지시에서 결정이 필요한 것을 찾아 선택지와 근거까지 정리합니다.', '팀원이 대화 중에 "결정해 주세요"라고 한 요청도 자동으로 모입니다.', '미뤄 둔 결정이 무엇을 막고 있는지 함께 보여 줍니다.'] },
+  { k: 'history', t: '히스토리 관리', img: 'history', b: ['해마다 이름이 바뀌는 과제를 AI가 하나의 핵심 업무로 묶어 수년간의 흐름을 정리합니다.', '지켜 온 원칙 · 오래 이어진 관계자 · 해 봤는데 안 된 것까지 자동으로 쌓입니다.', '담당자가 바뀌면 버튼 하나로 인수인계 자료를 보냅니다.'] },
+  { k: 'exec', t: '임원 브리핑', img: 'upward', b: ['상위 관리자별 이번 주 관심사와 예상 질문, 준비할 답을 미리 정리합니다.', '위에서 온 요청 중 아직 답하지 않은 것을 놓치지 않게 챙깁니다.', '먼저 알리면 좋을 소식까지 골라 보고 타이밍을 잡아 줍니다.'] },
+  { k: 'eval', t: '평가 시뮬레이션', img: 'eval', b: ['한 해 동안 쌓인 성과 · 1on1 · 결과물을 근거로 팀원별 평가 초안을 만듭니다.', '등급 시뮬레이션과 함께 근거가 부족한 부분은 부족하다고 표시합니다.', '평가 면담에서 꺼낼 강점 · 보완점을 기록으로 뒷받침합니다.'] },
+];
+const memberShots = [
+  { img: 'm_goals', t: '팀목표 · 성과입력', d: '팀 목표와 내 과제를 한눈에 보고, 성과를 바로 입력합니다. 팀장님이 승인하면 팀목표에 그대로 반영됩니다.' },
+  { img: 'm_dir', t: '팀의 기준 · 일 잘하는 방식', d: '팀장님이 반복해서 강조한 기준을 ATEAM이 정리해 두고 계속 리마인드합니다. 같은 말을 열 번 듣지 않아도 됩니다.' },
+  { img: 'm_board', t: '매니징 보드', d: '팀장님 지침 · 받은 피드백 · 칭찬 · 1on1을 한곳에 모아 봅니다.' },
+  { img: 'm_hist', t: '히스토리 한 번에 받기', d: '맡게 된 업무의 수년간 흐름 · 원칙 · 관계자 · 조심할 점을 한 번에 받아 빠르게 파악합니다.' },
+];
 ---
 <Base dark>
   <!-- 히어로: 큰 제목 두 장이 번갈아 넘어간다 (가운데 정렬) -->
   <section class="relative bg-ink text-white overflow-hidden">
     <div aria-hidden class="absolute left-1/2 -translate-x-1/2 -top-56 w-[900px] h-[620px] rounded-full bg-indigo-600/30 blur-[140px]"></div>
-    <div class="relative max-w-5xl mx-auto px-5 pt-24 pb-28 md:pt-36 md:pb-40 text-center flex flex-col items-center">
+    <div class="relative max-w-5xl mx-auto px-5 pt-20 pb-14 md:pt-28 md:pb-16 text-center flex flex-col items-center">
       <p class="text-base md:text-xl font-semibold tracking-wide text-indigo-300">팀장님을 위한 개인용 AI Solution</p>
       <div class="hero-slides mt-6 grid w-full" data-hero>
         <h1 class="hero-slide is-on text-[40px] sm:text-[56px] md:text-[76px] leading-[1.15] font-black tracking-tight">팀 운영을 위한 슈퍼에이전트<br /><span class="text-indigo-300">ATEAM</span></h1>
@@ -47,6 +74,149 @@ const faqs = [
       </div>
       <p class="mt-5 text-sm text-slate-500">팀장 1명 구독 · 팀원은 무료 초대</p>
     </div>
+    <!-- ATEAM 에이전트 (일러스트) — 가운데 팀장님, 그 곁을 ATEAM 에이전트가 감싸고 여섯 방면을 돌보며 말을 건넨다 (자비스처럼) -->
+    <div class="relative max-w-6xl mx-auto px-5 pb-20 md:pb-28">
+      <div class="jv relative rounded-[28px] overflow-hidden ring-1 ring-white/10 bg-[#070918] px-5 py-8 md:px-10 md:py-12 shadow-[0_40px_140px_-40px_rgba(99,102,241,.75)]" data-jv>
+        <div aria-hidden="true" class="absolute inset-0 jv-grid"></div>
+        <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] items-center">
+          <!-- HUD -->
+          <div class="relative mx-auto w-full max-w-[520px] aspect-square">
+            <div aria-hidden="true" class="absolute inset-[6%] rounded-full bg-indigo-600/20 blur-3xl"></div>
+            <svg viewBox="0 0 600 600" class="relative w-full h-full" role="img" aria-label="가운데 팀장님을 ATEAM 에이전트가 감싸고, 업무 피드백 · 팀원 케어 · 의사결정 · 리스크 경고 · 임원 보고 · 히스토리 여섯 방면을 돌봅니다">
+              <defs>
+                <radialGradient id="jvMe" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#2a2f6e"/><stop offset="1" stop-color="#0d1030"/></radialGradient>
+                <linearGradient id="jvRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5b4fc"/><stop offset=".5" stop-color="#818cf8"/><stop offset="1" stop-color="#c084fc"/></linearGradient>
+                <linearGradient id="jvSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgba(129,140,248,0)"/><stop offset="1" stop-color="rgba(129,140,248,.35)"/></linearGradient>
+                <path id="jvText" d="M300 300 m-168 0 a168 168 0 1 1 336 0 a168 168 0 1 1 -336 0"/>
+              </defs>
+              <g class="jv-ticks" stroke="rgba(165,180,252,.35)" stroke-width="1.2"><line x1="300.0" y1="14.0" x2="300.0" y2="4.0"/><line x1="329.9" y1="15.6" x2="330.5" y2="9.6"/><line x1="359.5" y1="20.2" x2="360.7" y2="14.4"/><line x1="388.4" y1="28.0" x2="390.2" y2="22.3"/><line x1="416.3" y1="38.7" x2="418.8" y2="33.2"/><line x1="443.0" y1="52.3" x2="448.0" y2="43.7"/><line x1="468.1" y1="68.6" x2="471.6" y2="63.8"/><line x1="491.4" y1="87.5" x2="495.4" y2="83.0"/><line x1="512.5" y1="108.6" x2="517.0" y2="104.6"/><line x1="531.4" y1="131.9" x2="536.2" y2="128.4"/><line x1="547.7" y1="157.0" x2="556.3" y2="152.0"/><line x1="561.3" y1="183.7" x2="566.8" y2="181.2"/><line x1="572.0" y1="211.6" x2="577.7" y2="209.8"/><line x1="579.8" y1="240.5" x2="585.6" y2="239.3"/><line x1="584.4" y1="270.1" x2="590.4" y2="269.5"/><line x1="586.0" y1="300.0" x2="596.0" y2="300.0"/><line x1="584.4" y1="329.9" x2="590.4" y2="330.5"/><line x1="579.8" y1="359.5" x2="585.6" y2="360.7"/><line x1="572.0" y1="388.4" x2="577.7" y2="390.2"/><line x1="561.3" y1="416.3" x2="566.8" y2="418.8"/><line x1="547.7" y1="443.0" x2="556.3" y2="448.0"/><line x1="531.4" y1="468.1" x2="536.2" y2="471.6"/><line x1="512.5" y1="491.4" x2="517.0" y2="495.4"/><line x1="491.4" y1="512.5" x2="495.4" y2="517.0"/><line x1="468.1" y1="531.4" x2="471.6" y2="536.2"/><line x1="443.0" y1="547.7" x2="448.0" y2="556.3"/><line x1="416.3" y1="561.3" x2="418.8" y2="566.8"/><line x1="388.4" y1="572.0" x2="390.2" y2="577.7"/><line x1="359.5" y1="579.8" x2="360.7" y2="585.6"/><line x1="329.9" y1="584.4" x2="330.5" y2="590.4"/><line x1="300.0" y1="586.0" x2="300.0" y2="596.0"/><line x1="270.1" y1="584.4" x2="269.5" y2="590.4"/><line x1="240.5" y1="579.8" x2="239.3" y2="585.6"/><line x1="211.6" y1="572.0" x2="209.8" y2="577.7"/><line x1="183.7" y1="561.3" x2="181.2" y2="566.8"/><line x1="157.0" y1="547.7" x2="152.0" y2="556.3"/><line x1="131.9" y1="531.4" x2="128.4" y2="536.2"/><line x1="108.6" y1="512.5" x2="104.6" y2="517.0"/><line x1="87.5" y1="491.4" x2="83.0" y2="495.4"/><line x1="68.6" y1="468.1" x2="63.8" y2="471.6"/><line x1="52.3" y1="443.0" x2="43.7" y2="448.0"/><line x1="38.7" y1="416.3" x2="33.2" y2="418.8"/><line x1="28.0" y1="388.4" x2="22.3" y2="390.2"/><line x1="20.2" y1="359.5" x2="14.4" y2="360.7"/><line x1="15.6" y1="329.9" x2="9.6" y2="330.5"/><line x1="14.0" y1="300.0" x2="4.0" y2="300.0"/><line x1="15.6" y1="270.1" x2="9.6" y2="269.5"/><line x1="20.2" y1="240.5" x2="14.4" y2="239.3"/><line x1="28.0" y1="211.6" x2="22.3" y2="209.8"/><line x1="38.7" y1="183.7" x2="33.2" y2="181.2"/><line x1="52.3" y1="157.0" x2="43.7" y2="152.0"/><line x1="68.6" y1="131.9" x2="63.8" y2="128.4"/><line x1="87.5" y1="108.6" x2="83.0" y2="104.6"/><line x1="108.6" y1="87.5" x2="104.6" y2="83.0"/><line x1="131.9" y1="68.6" x2="128.4" y2="63.8"/><line x1="157.0" y1="52.3" x2="152.0" y2="43.7"/><line x1="183.7" y1="38.7" x2="181.2" y2="33.2"/><line x1="211.6" y1="28.0" x2="209.8" y2="22.3"/><line x1="240.5" y1="20.2" x2="239.3" y2="14.4"/><line x1="270.1" y1="15.6" x2="269.5" y2="9.6"/></g>
+              <circle cx="300" cy="300" r="280" fill="none" stroke="rgba(165,180,252,.12)"/>
+              <!-- 레이더처럼 도는 빛 -->
+              <g class="jv-sweep"><path d="M300 300 L300 32 A268 268 0 0 1 434 68 Z" fill="url(#jvSweep)"/></g>
+              <!-- 여섯 방면 -->
+            <g class="jv-seg" data-k="0" tabindex="0" role="button" aria-label="업무 피드백">
+              <path d="M311.7 32.3 A268 268 0 0 1 526.0 156.0 L465.3 194.7 A196 196 0 0 0 308.5 104.2Z" class="jv-arc"/>
+              <g transform="translate(405.0 75.1)" class="jv-ic"><path d="M4 6h16M4 12h10M4 18h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="416.0" y="117.1" text-anchor="middle" class="jv-lb">업무 피드백</text>
+            </g>
+            <g class="jv-seg" data-k="1" tabindex="0" role="button" aria-label="팀원 케어">
+              <path d="M537.7 176.3 A268 268 0 0 1 537.7 423.7 L473.9 390.5 A196 196 0 0 0 473.9 209.5Z" class="jv-arc"/>
+              <g transform="translate(521.0 276.0)" class="jv-ic"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="532.0" y="318.0" text-anchor="middle" class="jv-lb">팀원 케어</text>
+            </g>
+            <g class="jv-seg" data-k="2" tabindex="0" role="button" aria-label="의사결정">
+              <path d="M526.0 444.0 A268 268 0 0 1 311.7 567.7 L308.5 495.8 A196 196 0 0 0 465.3 405.3Z" class="jv-arc"/>
+              <g transform="translate(405.0 476.9)" class="jv-ic"><path d="M16 3h5v5M8 3H3v5M12 22v-8.3a4 4 0 0 0-1.2-2.8L3 3M21 3l-7.8 7.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="416.0" y="518.9" text-anchor="middle" class="jv-lb">의사결정</text>
+            </g>
+            <g class="jv-seg" data-k="3" tabindex="0" role="button" aria-label="리스크 경고">
+              <path d="M288.3 567.7 A268 268 0 0 1 74.0 444.0 L134.7 405.3 A196 196 0 0 0 291.5 495.8Z" class="jv-arc"/>
+              <g transform="translate(173.0 476.9)" class="jv-ic"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="184.0" y="518.9" text-anchor="middle" class="jv-lb">리스크 경고</text>
+            </g>
+            <g class="jv-seg" data-k="4" tabindex="0" role="button" aria-label="임원 보고">
+              <path d="M62.3 423.7 A268 268 0 0 1 62.3 176.3 L126.1 209.5 A196 196 0 0 0 126.1 390.5Z" class="jv-arc"/>
+              <g transform="translate(57.0 276.0)" class="jv-ic"><path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M5.5 21a6.5 6.5 0 0 1 13 0M12 11l1.2 2.4-1.2 5-1.2-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="68.0" y="318.0" text-anchor="middle" class="jv-lb">임원 보고</text>
+            </g>
+            <g class="jv-seg" data-k="5" tabindex="0" role="button" aria-label="히스토리">
+              <path d="M74.0 156.0 A268 268 0 0 1 288.3 32.3 L291.5 104.2 A196 196 0 0 0 134.7 194.7Z" class="jv-arc"/>
+              <g transform="translate(173.0 75.1)" class="jv-ic"><path d="M12 8v4l3 3M3.05 11a9 9 0 1 1 .5 4M3 4v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <text x="184.0" y="117.1" text-anchor="middle" class="jv-lb">히스토리</text>
+            </g>
+              <!-- ATEAM 에이전트 고리 -->
+              <circle cx="300" cy="300" r="178" fill="none" stroke="rgba(129,140,248,.25)"/>
+              <g class="jv-spin"><circle cx="300" cy="300" r="178" fill="none" stroke="url(#jvRing)" stroke-width="3" stroke-dasharray="210 70 40 70 90 70 40 70" stroke-linecap="round"/><circle cx="300" cy="122" r="5" fill="#e0e7ff" class="jv-glow"/></g>
+              <g class="jv-spin-r"><text class="jv-ring-t"><textPath href="#jvText" startOffset="0">ATEAM AGENT · AUTOPILOT · 팀장님 곁에서 · ATEAM AGENT · AUTOPILOT · 팀장님 곁에서 ·</textPath></text></g>
+              <!-- 팀장님 -->
+              <circle cx="300" cy="300" r="132" fill="url(#jvMe)" stroke="rgba(165,180,252,.45)"/>
+              <circle cx="300" cy="300" r="132" fill="none" stroke="#818cf8" stroke-opacity=".5" class="jv-pulse"/>
+              <g transform="translate(270 192) scale(2.5)" fill="none" stroke="#c7d2fe" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></g>
+              <text x="300" y="285" text-anchor="middle" class="jv-me">팀장님</text>
+            </svg>
+            <!-- 팀장님이 에이전트에게 말을 건다 -->
+            <div class="absolute left-1/2 top-[52%] -translate-x-1/2 w-[48%] md:w-[42%] flex flex-col items-center">
+              <div class="jv-ask w-full flex items-center gap-1.5 md:gap-2 rounded-full pl-2.5 pr-3 py-1.5 md:py-2">
+                <span class="shrink-0 grid place-items-center"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg></span>
+                <span class="jv-ask-in flex-1 min-w-0 whitespace-nowrap overflow-hidden text-[11px] md:text-[13px] font-semibold text-slate-100"><span class="jv-ask-t">보고서 먼저 봐 줬어?</span><i class="jv-caret"></i></span>
+                <svg class="hidden md:block shrink-0 opacity-60" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5v6a3 3 0 0 1-3 3H5M9 10l-4 4 4 4"/></svg>
+              </div>
+              <span class="mt-2 flex gap-1" aria-hidden="true"><i class="jv-wave"></i><i class="jv-wave" style="animation-delay:.15s"></i><i class="jv-wave" style="animation-delay:.3s"></i><i class="jv-wave" style="animation-delay:.45s"></i><i class="jv-wave" style="animation-delay:.6s"></i></span>
+            </div>
+          </div>
+          <!-- 에이전트가 건네는 말 -->
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 via-indigo-600 to-violet-700 shadow-[0_0_24px_rgba(129,140,248,.8)] flex items-center justify-center"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="3.8" stroke-linecap="round"><path d="M6 33 L34 7.8"/><path d="M23 17.7 V33"/></g></svg></span>
+              <div><b class="block text-white font-black tracking-tight">ATEAM 에이전트</b><span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 jv-blink"></span>팀장님 질문에 답하는 중</span></div>
+            </div>
+            <ul class="mt-5 space-y-2">
+              <li class="jv-msg" data-q="" data-k="0"><span class="jv-q">팀장님 · “보고서 먼저 봐 줬어?”</span><span class="jv-tag">업무 피드백</span><p>팀장님, 결과물 3건은 팀장님 기준대로 먼저 피드백해 뒀어요.</p></li>
+              <li class="jv-msg" data-q="" data-k="1"><span class="jv-q">팀장님 · “이번 주 누구 챙길까?”</span><span class="jv-tag">팀원 케어</span><p>이번 주엔 두 사람과 1on1을 잡으시면 좋겠어요. 준비 노트도 만들어 뒀어요.</p></li>
+              <li class="jv-msg" data-q="" data-k="2"><span class="jv-q">팀장님 · “오늘 결정할 거 있어?”</span><span class="jv-tag">의사결정</span><p>결정이 필요한 안건 2건, 선택지와 근거까지 정리했습니다.</p></li>
+              <li class="jv-msg" data-q="" data-k="3"><span class="jv-q">팀장님 · “내가 놓친 거 없어?”</span><span class="jv-tag">리스크 경고</span><p>제휴 제안서가 2주 밀릴 신호가 보여요. 지금 손쓰면 막을 수 있어요.</p></li>
+              <li class="jv-msg" data-q="" data-k="4"><span class="jv-q">팀장님 · “임원 보고 준비됐어?”</span><span class="jv-tag">임원 보고</span><p>내일 임원 보고에서 나올 질문 3개와 답할 근거를 챙겨 뒀어요.</p></li>
+              <li class="jv-msg" data-q="" data-k="5"><span class="jv-q">팀장님 · “인수인계할 거 있어?”</span><span class="jv-tag">히스토리</span><p>새로 맡은 팀원에게 이 업무의 5년 히스토리를 보내 둘까요?</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      .jv-grid { background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px); background-size: 22px 22px; mask-image: radial-gradient(ellipse at 35% 50%, #000 30%, transparent 80%); }
+      .jv text { font-family: inherit; }
+      .jv-arc { fill: rgba(99,102,241,.08); stroke: rgba(165,180,252,.28); stroke-width: 1; transition: fill .4s, stroke .4s; }
+      .jv-ic { color: #a5b4fc; transition: color .4s; }
+      .jv-lb { font-size: 13px; font-weight: 700; fill: #cbd5e1; transition: fill .4s; }
+      .jv-seg { cursor: pointer; outline: none; }
+      .jv-seg.is-on .jv-arc { fill: rgba(129,140,248,.38); stroke: #c7d2fe; }
+      .jv-seg.is-on .jv-ic { color: #fff; }
+      .jv-seg.is-on .jv-lb { fill: #fff; }
+      .jv-seg:focus-visible .jv-arc { stroke: #fff; stroke-width: 2; }
+      .jv-ring-t { font-size: 10.5px; font-weight: 800; letter-spacing: .32em; fill: rgba(199,210,254,.55); }
+      .jv-me { font-size: 24px; font-weight: 900; fill: #fff; }
+      .jv-me2 { font-size: 12.5px; fill: #a5b4fc; }
+      .jv-spin { transform-origin: 300px 300px; animation: jvSpin 16s linear infinite; }
+      .jv-spin-r { transform-origin: 300px 300px; animation: jvSpin 40s linear infinite reverse; }
+      .jv-sweep { transform-origin: 300px 300px; animation: jvSpin 6s linear infinite; }
+      .jv-ticks { transform-origin: 300px 300px; animation: jvSpin 90s linear infinite; }
+      @keyframes jvSpin { to { transform: rotate(360deg) } }
+      .jv-glow { filter: drop-shadow(0 0 6px #a5b4fc); }
+      .jv-pulse { transform-origin: 300px 300px; animation: jvPulse 2.8s ease-out infinite; }
+      @keyframes jvPulse { 0% { transform: scale(1); opacity: .8 } 100% { transform: scale(1.22); opacity: 0 } }
+      .jv-blink { animation: jvBlink 1.4s ease-in-out infinite; }
+      @keyframes jvBlink { 50% { opacity: .3 } }
+      .jv-msg { border-radius: 14px; padding: 12px 14px; background: rgba(255,255,255,.03); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); color: #64748b; transition: all .4s; cursor: pointer; }
+      .jv-msg p { margin-top: 2px; font-size: 14.5px; line-height: 1.55; }
+      .jv-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; color: #64748b; }
+      .jv-msg.is-on { background: linear-gradient(90deg, rgba(99,102,241,.22), rgba(99,102,241,.06)); box-shadow: inset 0 0 0 1px rgba(165,180,252,.45), 0 10px 30px -12px rgba(99,102,241,.7); color: #fff; }
+      .jv-msg.is-on .jv-tag { color: #a5b4fc; }
+      .jv-msg.is-on p::after { content: ''; display: inline-block; width: 7px; height: 15px; margin-left: 3px; vertical-align: -2px; background: #a5b4fc; animation: jvBlink 1s steps(2) infinite; }
+      .jv-q { display: none; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: #c7d2fe; }
+      .jv-msg.is-on .jv-q { display: block; }
+      .jv-ask { background: rgba(255,255,255,.06); border: 1px solid rgba(165,180,252,.22); backdrop-filter: blur(8px); }
+      .jv-caret { display: inline-block; width: 1.5px; height: 1.05em; margin-left: 2px; vertical-align: -2px; background: #a5b4fc; animation: jvCaret 1s steps(1) infinite; }
+      @keyframes jvCaret { 50% { opacity: 0 } }
+      .jv-wave { display: block; width: 3px; height: 10px; border-radius: 2px; background: #a5b4fc; animation: jvWave .9s ease-in-out infinite; }
+      @keyframes jvWave { 50% { height: 3px; opacity: .5 } }
+      @media (max-width: 1023px) { .jv-msg:not(.is-on) { display: none; } }
+      @media (prefers-reduced-motion: reduce) { .jv-spin, .jv-spin-r, .jv-sweep, .jv-ticks, .jv-pulse, .jv-blink, .jv-msg.is-on p::after, .jv-wave, .jv-caret { animation: none; } }
+    </style>
+    <script>
+      const jv = document.querySelector('[data-jv]');
+      if (jv) {
+        const segs = [...jv.querySelectorAll<SVGGElement>('.jv-seg')];
+        const msgs = [...jv.querySelectorAll<HTMLElement>('.jv-msg')];
+        const ask = jv.querySelector<HTMLElement>('.jv-ask-t'); const askBox = jv.querySelector<HTMLElement>('.jv-ask');
+        const QS = ["보고서 먼저 봐 줬어?", "이번 주 누구 챙길까?", "오늘 결정할 거 있어?", "내가 놓친 거 없어?", "임원 보고 준비됐어?", "인수인계할 거 있어?"];
+        let k = 0; let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches; let t: ReturnType<typeof setInterval> | undefined; const still = !auto; let typer = 0; const box = jv.querySelector<HTMLElement>('.jv-ask-in');
+        const show = (n: number) => { k = (n + segs.length) % segs.length; segs.forEach((g, i) => g.classList.toggle('is-on', i === k)); msgs.forEach((m, i) => m.classList.toggle('is-on', i === k)); if (ask && askBox) { clearInterval(typer); const q = QS[k]; if (still) { ask.textContent = q; } else { let c = 0; ask.textContent = ''; typer = window.setInterval(() => { ask.textContent = q.slice(0, ++c); if (box) box.scrollLeft = box.scrollWidth; if (c >= q.length) clearInterval(typer); }, 55); } } };
+        const pick = (n: number) => { show(n); clearInterval(t); if (auto) t = setInterval(() => show(k + 1), 3200); };
+        segs.forEach((g, i) => { g.addEventListener('click', () => pick(i)); g.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter') pick(i); }); });
+        msgs.forEach((m, i) => m.addEventListener('click', () => pick(i)));
+        pick(0);
+      }
+    </script>
   </section>
   <style>
     .hero-slides > .hero-slide { grid-area: 1 / 1; margin: 0; opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
@@ -78,115 +248,115 @@ const faqs = [
       <p class="text-sm font-bold text-indigo-600">팀장의 현실</p>
       <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">팀 운영의 모든 걸 혼자 감당하기,<br class="hidden md:block" /> 벅차지 않으세요?</h2>
       <div class="mt-12 grid gap-4 md:grid-cols-2">
-        {pains.map(([t, d], i) => (
+        {pains.map(([t, d, fix], i) => (
           <div class="rounded-2xl bg-white ring-1 ring-slate-200 p-6 flex gap-5">
             <span class="text-lg font-black text-indigo-600 w-7 shrink-0">0{i + 1}</span>
-            <div><b class="block text-lg font-bold">{t}</b><span class="block mt-1 text-slate-500">{d}</span></div>
+            <div class="min-w-0"><b class="block text-lg font-bold">{t}</b><span class="block mt-1 text-slate-500 leading-relaxed">{d}</span>
+              <span class="mt-3 inline-flex items-start gap-1.5 text-[14.5px] font-semibold text-indigo-700"><span aria-hidden="true">→</span>ATEAM이 {fix}</span></div>
           </div>
         ))}
       </div>
       <div class="mt-10 rounded-2xl bg-ink text-white p-7 md:p-9 grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
-        <p class="text-lg md:text-xl leading-relaxed text-slate-300">흩어진 기록을 이어 붙이는 곳이 팀장 한 사람뿐이라서, 결국<br class="hidden md:block" /> <b class="text-white">늦게 알고, 못 보고, 놓치게 됩니다.</b></p>
-        <a href="#features" class="inline-flex justify-center rounded-xl bg-white text-ink px-5 py-3 font-bold hover:bg-slate-100">ATEAM이 나눠 드는 것 ↓</a>
+        <p class="text-lg md:text-xl leading-relaxed text-slate-300">기록을 다 읽고, 기준을 지키고, 결정하고, 챙기는 일이 팀장 한 사람에게 몰려 있어서 결국<br class="hidden md:block" /> <b class="text-white">늦게 알고, 못 보고, 놓치게 됩니다.</b></p>
+        <a href="#features" class="inline-flex justify-center rounded-xl bg-white text-ink px-5 py-3 font-bold hover:bg-slate-100">실제 화면으로 보기 ↓</a>
       </div>
     </div>
   </section>
 
-  <!-- 기능 4 -->
+  <!-- 이렇게 사용하세요 (실제 화면) -->
   <section id="features" class="scroll-mt-16">
-    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28 space-y-24">
-      <div class="max-w-2xl">
-        <p class="text-sm font-bold text-indigo-600">ATEAM이 해 주는 일</p>
-        <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">팀이 남긴 기록을 매주 읽고,<br />팀장이 알아야 할 것만 꺼내 줍니다</h2>
-      </div>
-
-      <!-- ① -->
-      <div class="grid gap-10 lg:grid-cols-2 items-center">
-        <div>
-          <span class="text-sm font-black text-indigo-600">01 · 조기 경고</span>
-          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">문제가 커지기 전에 먼저 알려 줘요</h3>
-          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">업무 · 1on1 · 컨디션 기록에서 위험 신호를 골라 냅니다. 마감이 밀릴 과제, 꺾이기 시작한 팀원, 윗분이 조만간 물어볼 문제까지.</p>
-        </div>
-        <div class="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-6 space-y-3">
-          <div class="rounded-2xl bg-white ring-1 ring-rose-100 p-4"><span class="text-xs font-bold text-rose-700 bg-rose-50 rounded-full px-2.5 py-1">업무 리스크</span><p class="mt-2.5 font-medium">런칭 캠페인이 이대로면 마감보다 늦어질 가능성이 높아요</p></div>
-          <div class="rounded-2xl bg-white ring-1 ring-orange-100 p-4"><span class="text-xs font-bold text-orange-800 bg-orange-50 rounded-full px-2.5 py-1">팀원 신호</span><p class="mt-2.5 font-medium">3주째 컨디션이 내려가는 팀원이 있어요 — 1on1을 권해요</p></div>
-          <div class="rounded-2xl bg-white ring-1 ring-indigo-100 p-4"><span class="text-xs font-bold text-indigo-700 bg-indigo-50 rounded-full px-2.5 py-1">위에서 볼 것</span><p class="mt-2.5 font-medium">다음 주 임원 보고 전에 파이프라인 현황이 비어 있어요</p></div>
-          <p class="text-[11px] text-slate-400">화면 예시</p>
-        </div>
-      </div>
-
-      <!-- ② -->
-      <div class="grid gap-10 lg:grid-cols-2 items-center">
-        <div class="lg:order-2">
-          <span class="text-sm font-black text-indigo-600">02 · 숨은 패턴</span>
-          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">나도 몰랐던 패턴을 찾아 줘요</h3>
-          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">일이 밀리는 진짜 이유, 성과를 끌어내리는 숨은 원인, 나도 모르게 몇몇 팀원에게만 시간을 쓰는 습관까지 보여 줍니다.</p>
-        </div>
-        <div class="lg:order-1 rounded-3xl bg-ink text-white p-6">
-          <span class="text-xs text-slate-400">최근 4주 팀장 접점</span>
-          <div class="mt-4 space-y-3">
-            {[['팀원 A', 92, 'bg-indigo-500'], ['팀원 B', 74, 'bg-indigo-500'], ['팀원 C', 22, 'bg-indigo-900'], ['팀원 D', 14, 'bg-indigo-900'], ['팀원 E', 4, 'bg-rose-400']].map(([n, w, c]) => (
-              <div class="flex items-center gap-3"><span class="w-14 text-sm text-slate-300">{n}</span><div class="flex-1 h-3 rounded-full bg-line"><div class={`h-3 rounded-full ${c}`} style={`width:${w}%`}></div></div></div>
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-28">
+      <p class="text-sm font-bold text-indigo-600">실제 화면으로 보기</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">ATEAM, 이렇게 사용하세요.</h2>
+      <p class="mt-4 text-lg text-slate-600">팀장이 매주 하는 일마다 화면이 준비돼 있고, ATEAM이 먼저 읽어 둡니다.</p>
+      <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start" data-uses>
+        <ul class="border-t border-slate-200">
+          {uses.map((u, i) => (
+            <li class="use border-b border-slate-200" data-i={i}>
+              <button type="button" class="use-head w-full flex items-center gap-3 py-4 text-left" aria-expanded={i === 0 ? 'true' : 'false'}>
+                <span class="use-ic w-9 h-9 rounded-lg ring-1 ring-slate-200 bg-white flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={I[u.k]} /></span>
+                <span class="use-t text-lg font-bold">{u.t}</span>
+              </button>
+              <div class="use-body">
+                <div class="use-in">
+                  <ul class="pb-5 pl-12 pr-2 space-y-2 text-[15.5px] text-slate-600 leading-relaxed list-disc marker:text-slate-400">{u.b.map((x) => <li>{x}</li>)}</ul>
+                  <div class="lg:hidden pb-6"><div class="use-shot rounded-2xl p-3"><img src={`/shots/${u.img}.webp`} alt={`${u.t} 화면`} loading="lazy" class="rounded-lg shadow-xl w-full" /></div></div>
+                </div>
+              </div>
+              <span class="use-bar" aria-hidden="true"></span>
+            </li>
+          ))}
+        </ul>
+        <div class="hidden lg:block sticky top-24">
+          <div class="use-shot relative rounded-3xl overflow-hidden aspect-[4/3.1]">
+            {uses.map((u, i) => (
+              <img src={`/shots/${u.img}.webp`} alt={`${u.t} 화면`} loading={i ? 'lazy' : 'eager'} data-shot={i}
+                class={`use-img absolute left-[7%] top-[8%] w-[118%] max-w-none rounded-xl shadow-2xl ring-1 ring-black/5 ${i === 0 ? 'is-on' : ''}`} />
             ))}
           </div>
-          <p class="mt-5 pt-4 border-t border-line font-bold">관심이 두 사람에게 몰려 있어요. <span class="text-rose-300">한 명은 4주째 거의 대화가 없었어요.</span></p>
-          <p class="mt-3 text-[11px] text-slate-500">화면 예시</p>
-        </div>
-      </div>
-
-      <!-- ③ -->
-      <div class="grid gap-10 lg:grid-cols-2 items-center">
-        <div>
-          <span class="text-sm font-black text-indigo-600">03 · 전망</span>
-          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">분기 말을 미리 보여 줘요</h3>
-          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">목표별 달성 가능성과 마감 전망, 낙관 · 비관 범위, 그리고 무엇을 바꾸면 결과가 달라지는지까지 알려 줍니다.</p>
-        </div>
-        <div class="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-6 space-y-5">
-          {[['신제품 런칭 캠페인', '달성 가능', 82, 'bg-emerald-500', 'text-emerald-700'], ['제휴 채널 신규 고객', '아슬아슬', 64, 'bg-amber-400', 'text-amber-700'], ['운영 효율화', '미달 위험', 41, 'bg-rose-500', 'text-rose-700']].map(([n, s, w, c, t]) => (
-            <div><div class="flex justify-between text-[15px]"><b>{n}</b><span class={`font-bold ${t}`}>{s}</span></div><div class="mt-2 h-3 rounded-full bg-slate-200"><div class={`h-3 rounded-full ${c}`} style={`width:${w}%`}></div></div></div>
-          ))}
-          <p class="rounded-xl bg-indigo-50 px-4 py-3 text-[15px]"><b class="text-indigo-800">바꾸면 달라지는 것</b> · 보고 체계 과제를 한 명 더 맡기면 분기 안에 끝낼 수 있어요</p>
-          <p class="text-[11px] text-slate-400">화면 예시</p>
-        </div>
-      </div>
-
-      <!-- ④ -->
-      <div class="grid gap-10 lg:grid-cols-2 items-center">
-        <div class="lg:order-2">
-          <span class="text-sm font-black text-indigo-600">04 · AUTOPILOT</span>
-          <h3 class="mt-3 text-2xl md:text-[32px] font-black leading-snug tracking-tight">놓친 것은 알아서 챙겨 줘요</h3>
-          <p class="mt-4 text-slate-600 leading-relaxed text-[17px]">결정할 것, 위에서 온 요청, 챙겨야 할 팀원을 이번 주 할 일로 정리합니다. 칭찬 · 독려 메시지 초안까지 준비해 두니 누르기만 하면 됩니다.</p>
-        </div>
-        <div class="lg:order-1 rounded-3xl bg-ink text-white p-6">
-          <span class="text-xs text-slate-400">이번 주 할 일 · 20개 안팎</span>
-          <ul class="mt-3 divide-y divide-line">
-            {['결정을 기다리는 일 2건', '위에서 온 요청 미회신 1건', '2주 넘게 1on1이 없었던 팀원', '칭찬할 타이밍을 놓치기 직전'].map((t, i) => (
-              <li class="flex items-center gap-3 py-3"><span class="w-7 h-7 rounded-full bg-indigo-600 text-sm font-black flex items-center justify-center">{i + 1}</span><span class="font-semibold">{t}</span><span class="ml-auto text-xs text-indigo-200">바로 하기 →</span></li>
-            ))}
-          </ul>
-          <p class="mt-2 text-[11px] text-slate-500">화면 예시</p>
+          <p class="mt-3 text-xs text-slate-400">데모 팀 데이터로 띄운 실제 화면입니다. 이름은 모두 가상입니다.</p>
         </div>
       </div>
     </div>
   </section>
+  <style>
+    .use-shot { background: radial-gradient(120% 120% at 0% 0%, #312e81 0%, #4338ca 38%, #7c3aed 72%, #a78bfa 100%); }
+    .use-img { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+    .use-img.is-on { opacity: 1; transform: none; }
+    .use { position: relative; }
+    .use-t { color: #94a3b8; transition: color .2s; }
+    .use-ic { color: #94a3b8; }
+    .use.is-on .use-t { color: #0f172a; }
+    .use.is-on .use-ic { color: #4f46e5; box-shadow: 0 1px 2px rgba(15,23,42,.08); }
+    .use-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+    .use.is-on .use-body { grid-template-rows: 1fr; }
+    .use-in { overflow: hidden; }
+    .use-bar { position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: #0f172a; }
+    .use.is-on .use-bar.run { animation: usebar var(--dur, 7s) linear forwards; }
+    @keyframes usebar { from { width: 0 } to { width: 100% } }
+    @media (prefers-reduced-motion: reduce) { .use-img, .use-body { transition: none; } .use.is-on .use-bar.run { animation: none; width: 100%; } }
+  </style>
+  <script>
+    const root = document.querySelector('[data-uses]');
+    if (root) {
+      const items = [...root.querySelectorAll<HTMLElement>('.use')];
+      const shots = [...root.querySelectorAll<HTMLElement>('[data-shot]')];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let cur = 0; let auto = !reduce; let t: ReturnType<typeof setTimeout> | undefined;
+      const DUR = 7000;
+      const show = (n: number) => {
+        cur = (n + items.length) % items.length;
+        items.forEach((el, k) => {
+          el.classList.toggle('is-on', k === cur);
+          el.querySelector('.use-head')?.setAttribute('aria-expanded', String(k === cur));
+          const bar = el.querySelector('.use-bar'); bar?.classList.remove('run');
+          if (k === cur && auto) { void (bar as HTMLElement)?.offsetWidth; bar?.classList.add('run'); }
+        });
+        shots.forEach((im, k) => im.classList.toggle('is-on', k === cur));
+        clearTimeout(t);
+        if (auto) t = setTimeout(() => show(cur + 1), DUR);
+      };
+      items.forEach((el, k) => el.querySelector('.use-head')?.addEventListener('click', () => { auto = false; show(k); }));
+      // 화면에 보일 때만 자동으로 넘긴다
+      const io = new IntersectionObserver(([e]) => { if (!e.isIntersecting) clearTimeout(t); else if (auto) show(cur); }, { threshold: 0.3 });
+      io.observe(root);
+      show(0);
+    }
+  </script>
 
-  <!-- 팀원 쪽 -->
+  <!-- 팀원 쪽 (실제 화면) -->
   <section id="members" class="bg-slate-50 scroll-mt-16">
     <div class="max-w-6xl mx-auto px-5 py-20 md:py-28">
       <p class="text-sm font-bold text-indigo-600">팀원 쪽에서는</p>
       <h2 class="mt-3 text-3xl md:text-[42px] leading-tight font-black tracking-tight">같은 말을 열 번 하지 않아도 돼요</h2>
-      <p class="mt-4 text-lg text-slate-600">팀원은 무료로 초대되어, 팀의 방향을 보고 올리기 전에 스스로 다듬습니다.</p>
-      <div class="mt-12 grid gap-5 md:grid-cols-2">
-        <div class="rounded-3xl bg-white ring-1 ring-slate-200 p-7">
-          <b class="text-xl font-black">팀 방향</b>
-          <p class="mt-3 text-slate-600 leading-relaxed">이번 분기 목표와 팀장님이 반복해서 강조한 기준을 ATEAM이 한 장으로 정리합니다. 팀장이 따로 쓰지 않아도 됩니다.</p>
-          <div class="mt-5 flex flex-wrap gap-2">{['결론은 첫 문단에', '숫자엔 기준일', '유관부서와 미리'].map((t) => <span class="text-sm font-bold rounded-full bg-indigo-50 text-indigo-700 px-3 py-1.5">{t}</span>)}</div>
-        </div>
-        <div class="rounded-3xl bg-white ring-1 ring-slate-200 p-7">
-          <b class="text-xl font-black">Sim.Box</b>
-          <p class="mt-3 text-slate-600 leading-relaxed">보고서를 올리기 전에 “팀장님이라면 뭐라고 하실까?”를 미리 시뮬레이션합니다. 예상 질문과 보완할 점을 짚어 줍니다.</p>
-          <p class="mt-5 text-sm text-slate-500">여기서 쓴 내용은 팀원 본인만 볼 수 있어요</p>
-        </div>
+      <p class="mt-4 text-lg text-slate-600">팀원은 무료로 초대되어, 팀의 목표와 기준을 늘 곁에 두고 일합니다.</p>
+      <div class="mt-12 grid gap-6 md:grid-cols-2">
+        {memberShots.map((m) => (
+          <figure class="rounded-3xl bg-white ring-1 ring-slate-200 overflow-hidden flex flex-col">
+            <div class="use-shot px-5 pt-5 h-[230px] sm:h-[300px] overflow-hidden"><img src={`/shots/${m.img}.webp`} alt={`팀원 화면 — ${m.t}`} loading="lazy" class="w-[135%] max-w-none rounded-t-lg shadow-2xl" /></div>
+            <figcaption class="p-6"><b class="text-xl font-black">{m.t}</b><p class="mt-2 text-slate-600 leading-relaxed">{m.d}</p></figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   </section>
