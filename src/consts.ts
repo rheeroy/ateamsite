@@ -7,9 +7,9 @@ export const DEMO = `${APP}/demo`;
 // 사업자 정보 — 사업자등록증과 글자까지 똑같이 (푸터 · 약관 · 환불정책 · 개인정보처리방침이 같이 쓴다)
 export const BIZ = {
   name: '갓생맵', nameEn: 'STARTHALF', ceo: '이경훈', regNo: '553-65-00667', mailOrderNo: '2024-서울광진-1339',
-  address: '서울시 광진구 면목로 57, 501호', phone: '010-9329-2523', email: 'steve@starthalf.com',
+  address: '서울특별시 광진구 면목로 57 (중곡동)', phone: '010-9329-2523', email: 'steve@starthalf.com',
 };
-export const EFFECTIVE = '2026년 11월 6일';
+export const EFFECTIVE = '2026년 11월 7일';
 
 // 요금 (VAT 포함 최종 결제금액) — 앱의 plans 표와 같게 (supabase/migrations/…_plans_price.sql)
 export const PLANS = [
