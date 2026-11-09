@@ -3,9 +3,10 @@ import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import { BIZ, DEMO, LOGIN, SIGNUP } from '../consts';
 interface Props { title?: string; description?: string; dark?: boolean; article?: boolean }
-const { title, description = '성과관리 · 팀원관리 · 의사결정을 한 단계 끌어올리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false } = Astro.props;
-const full = title ? `${title} | ATEAM` : 'ATEAM — 팀 자율주행 엔진이 S급 팀장을 만들어줍니다';
+const { title, description = '팀장님의 기준으로 팀원 업무를 먼저 피드백하고, 지금 챙길 팀원 · 빨리 내릴 결정 · 숨은 리스크를 골라 드리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false } = Astro.props;
+const full = title ? `${title} | ATEAM` : 'ATEAM — 팀장님을 위한 개인용 AI, 팀 운영 슈퍼에이전트';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
 ---
 <!doctype html>
 <html lang="ko">
@@ -24,7 +25,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:locale" content="ko_KR" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ATEAM — 팀장님을 위한 개인용 AI Solution, 팀 운영을 위한 슈퍼에이전트" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content={ogImage} />
 </head>
 <body class="bg-white text-slate-900">
   <header class={`sticky top-0 z-40 backdrop-blur ${dark ? 'bg-ink/95 text-white border-b border-white/10' : 'bg-white/85 border-b border-slate-200'}`}>
