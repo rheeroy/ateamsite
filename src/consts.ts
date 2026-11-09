@@ -24,4 +24,3 @@ export const supply = (n: number) => Math.round(n / 1.1);
 
 // 가이드북 신청 — Supabase 함수 guide-request 주소 (Vercel 환경변수 PUBLIC_GUIDE_API = https://<프로젝트>.supabase.co/functions/v1/guide-request)
 export const GUIDE_API = (import.meta.env.PUBLIC_GUIDE_API as string | undefined) ?? '';
-export const GUIDE_PDF = '/guide/ATEAM_guidebook.pdf';
