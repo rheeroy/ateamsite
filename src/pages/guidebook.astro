@@ -1,0 +1,132 @@
+---
+// ATEAM 가이드북 신청 — 폼 제출 → guide-request 함수(저장 · 메일 발송) → 화면에서 바로 받기
+import Base from '../layouts/Base.astro';
+import { GUIDE_API, GUIDE_PDF } from '../consts';
+
+const inside = [
+  ['p-reality', 'PART 01', '팀장의 현실', '숫자로 보는 팀장의 자리와 팀장을 지치게 하는 네 가지 장면'],
+  ['p-test', 'PART 02', '운영 유형 TEST', '12문항 셀프 체크로 알아보는 나의 팀장 유형과 유형별 처방'],
+  ['p-agent', 'PART 03', 'ATEAM 슈퍼에이전트란', '팀장님 곁의 에이전트가 먼저 읽고 · 판단하고 · 준비하는 방식'],
+  ['p-week', 'PART 04', '팀장의 한 주 Before → After', '월요일 브리핑부터 임원 보고 · 인수인계까지 8가지 장면'],
+  ['p-feature', 'PART 05', '실제 화면 기능 가이드', '팀장 화면 8가지와 팀원 화면 4가지를 실제 화면으로'],
+  ['p-check', '부록', '팀장 실전 체크리스트 10', '커뮤니티 글 · 댓글 수천 건에서 반복된 이야기로 만든 행동 목록'],
+];
+const sizes = ['1~3명', '4~6명', '7~10명', '11~20명', '21명 이상'];
+---
+<Base title="ATEAM 가이드북 — 팀장님을 위한 AI 팀 운영 가이드" description="팀장 운영 유형 TEST부터 슈퍼에이전트 활용법, 실제 화면 기능 가이드, 팀장 실전 체크리스트 10까지. ATEAM 가이드북을 무료로 받아 보세요." dark>
+  <section class="relative bg-ink text-white overflow-hidden">
+    <div aria-hidden class="absolute -top-40 left-1/3 w-[760px] h-[520px] rounded-full bg-indigo-600/30 blur-[120px]"></div>
+    <div aria-hidden class="absolute -bottom-52 -left-40 w-[520px] h-[520px] rounded-full bg-fuchsia-500/15 blur-[120px]"></div>
+    <div class="relative max-w-6xl mx-auto px-5 pt-14 pb-20 md:pt-20 md:pb-24 grid gap-12 lg:grid-cols-[1.05fr_1fr] items-start">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/15 px-3 py-1 text-[13px] font-bold text-indigo-200">무료 가이드북 · PDF 19쪽</p>
+        <p class="mt-6 text-lg md:text-xl font-semibold text-slate-300 tracking-tight">팀장님을 위한 <span class="text-[1.25em] font-black bg-gradient-to-r from-indigo-300 via-purple-400 to-fuchsia-300 bg-clip-text text-transparent">개인용 AI Solution</span></p>
+        <h1 class="mt-3 text-[34px] md:text-[52px] leading-[1.15] font-black tracking-tight">혼자 하던 팀 운영,<br />이제 에이전트와 함께</h1>
+        <p class="mt-5 text-[17px] leading-relaxed text-slate-300">나는 어떤 팀장인지 진단해 보고, ATEAM 슈퍼에이전트가 팀장님의 한 주를 어떻게 바꾸는지 실제 화면으로 확인하세요.</p>
+        <div class="mt-8 md:mt-10 relative h-[230px] sm:h-[300px] md:h-[380px]">
+          <img src="/guide/p-test.webp" alt="" class="absolute left-[38%] top-6 w-[42%] md:w-[38%] rounded-lg shadow-2xl ring-1 ring-white/10 rotate-[6deg]" loading="lazy" />
+          <img src="/guide/p-week.webp" alt="" class="absolute left-[22%] top-3 w-[42%] md:w-[38%] rounded-lg shadow-2xl ring-1 ring-white/10 rotate-[2deg]" loading="lazy" />
+          <img src="/guide/cover.webp" alt="ATEAM 가이드북 표지" class="absolute left-0 top-0 w-[46%] md:w-[42%] rounded-lg shadow-[0_30px_60px_-15px_rgba(0,0,0,.7)] ring-1 ring-white/15 -rotate-[3deg]" />
+        </div>
+      </div>
+
+      <div class="rounded-3xl bg-white text-slate-900 p-6 md:p-8 shadow-2xl lg:sticky lg:top-24">
+        <div data-guide-form>
+          <h2 class="text-2xl font-black tracking-tight">가이드북 무료로 받기</h2>
+          <p class="mt-1.5 text-sm text-slate-500">입력하신 이메일로 가이드북을 보내 드리고, 이 화면에서도 바로 받을 수 있습니다.</p>
+          <form class="mt-6 grid gap-3.5" novalidate>
+            <div class="grid gap-3.5 sm:grid-cols-2">
+              <label class="grid gap-1.5 text-sm font-semibold">이름 <span class="sr-only">(필수)</span><input name="name" required maxlength="60" autocomplete="name" class="g-in" placeholder="홍길동" /></label>
+              <label class="grid gap-1.5 text-sm font-semibold">회사 <input name="company" required maxlength="100" autocomplete="organization" class="g-in" placeholder="회사명" /></label>
+            </div>
+            <label class="grid gap-1.5 text-sm font-semibold">업무 이메일 <input name="email" type="email" required maxlength="160" autocomplete="email" class="g-in" placeholder="name@company.com" /></label>
+            <div class="grid gap-3.5 sm:grid-cols-2">
+              <label class="grid gap-1.5 text-sm font-semibold"><span>직책 <span class="font-normal text-slate-400 text-xs">· 선택</span></span><input name="job_title" maxlength="60" class="g-in" placeholder="예: 마케팅팀장" /></label>
+              <label class="grid gap-1.5 text-sm font-semibold"><span>팀 규모 <span class="font-normal text-slate-400 text-xs">· 선택</span></span>
+                <select name="team_size" class="g-in"><option value="">선택해 주세요</option>{sizes.map((x) => <option>{x}</option>)}</select></label>
+            </div>
+            <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+            <div class="mt-1 rounded-xl bg-slate-50 p-3.5 grid gap-2.5 text-[13.5px]">
+              <label class="flex gap-2.5 items-start"><input type="checkbox" name="consent" class="mt-0.5 size-4 accent-indigo-600" /><span><b>[필수]</b> 개인정보 수집 · 이용에 동의합니다. <span class="text-slate-500">(이름 · 회사 · 이메일 · 직책 · 팀 규모 / 가이드북 발송과 문의 응대 / 수집일부터 1년 보관 후 파기 · <a href="/privacy" class="underline" target="_blank">개인정보처리방침</a>)</span></span></label>
+              <label class="flex gap-2.5 items-start"><input type="checkbox" name="marketing" class="mt-0.5 size-4 accent-indigo-600" /><span><b>[선택]</b> ATEAM 소식 · 팀장 아티클 · 이벤트 안내를 이메일로 받겠습니다.</span></label>
+            </div>
+            <p data-err class="hidden text-sm font-semibold text-rose-600"></p>
+            <button type="submit" class="mt-1 inline-flex justify-center rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 py-4 text-[16px] font-bold text-white">가이드북 받기</button>
+          </form>
+        </div>
+        <div data-guide-done class="hidden text-center py-6">
+          <div class="mx-auto grid place-items-center size-14 rounded-full bg-indigo-50 text-indigo-600 text-2xl">✓</div>
+          <h2 class="mt-5 text-2xl font-black tracking-tight">신청해 주셔서 감사합니다</h2>
+          <p data-done-msg class="mt-2 text-[15px] text-slate-600 leading-relaxed">가이드북을 메일로 보내 드렸습니다.<br />지금 바로 받으셔도 됩니다.</p>
+          <a data-dl href={GUIDE_PDF} download="ATEAM_가이드북.pdf" class="mt-6 inline-flex justify-center w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 py-4 text-[16px] font-bold text-white">가이드북 바로 받기 (PDF)</a>
+          <a href="/" class="mt-3 inline-flex justify-center w-full rounded-xl ring-1 ring-slate-200 py-3.5 font-bold text-slate-700 hover:bg-slate-50">ATEAM 둘러보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-6xl mx-auto px-5 py-20 md:py-24">
+      <p class="text-sm font-bold text-indigo-600 text-center">가이드북에 담긴 것</p>
+      <h2 class="mt-3 text-3xl md:text-[38px] font-black tracking-tight text-center">진단하고, 이해하고, 바로 써 보세요</h2>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {inside.map(([img, part, t, d]) => (
+          <div class="rounded-3xl bg-slate-50 ring-1 ring-slate-200 overflow-hidden">
+            <div class="h-56 overflow-hidden bg-slate-200/60 px-8 pt-6"><img src={`/guide/${img}.webp`} alt="" loading="lazy" class="w-full rounded-t-md shadow-lg ring-1 ring-slate-300/60" /></div>
+            <div class="p-6"><p class="text-xs font-black tracking-widest text-indigo-600">{part}</p><h3 class="mt-1.5 text-lg font-black tracking-tight">{t}</h3><p class="mt-1.5 text-[15px] text-slate-600 leading-relaxed">{d}</p></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-slate-50">
+    <div class="max-w-4xl mx-auto px-5 py-20 text-center">
+      <h2 class="text-2xl md:text-[32px] font-black tracking-tight">이런 팀장님께 추천합니다</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-3 text-left">
+        {[['같은 피드백을 매번 반복하는', '결과물마다 같은 말을 하다 결국 직접 고치게 되는 팀장님'], ['일이 너무 많아 팀원을 못 챙기는', '1on1은 밀리고 칭찬 타이밍은 놓치는 팀장님'], ['결정과 보고에 치이는', '흩어진 결정 요청과 임원 보고 준비로 하루가 끝나는 팀장님']].map(([t, d]) => (
+          <div class="rounded-2xl bg-white ring-1 ring-slate-200 p-6"><b class="text-[17px]">{t}</b><p class="mt-2 text-[15px] text-slate-600 leading-relaxed">{d}</p></div>
+        ))}
+      </div>
+      <a href="#" data-top class="mt-10 inline-flex rounded-xl bg-ink text-white px-7 py-4 text-lg font-bold hover:bg-slate-800">가이드북 무료로 받기 ↑</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .g-in { width: 100%; border-radius: .75rem; border: 1px solid rgb(226 232 240); background: #fff; padding: .7rem .85rem; font-size: 15px; font-weight: 400; outline: none; }
+  .g-in:focus { border-color: rgb(99 102 241); box-shadow: 0 0 0 3px rgb(99 102 241 / .15); }
+</style>
+
+<script define:vars={{ GUIDE_API }}>
+  const box = document.querySelector('[data-guide-form]');
+  const done = document.querySelector('[data-guide-done]');
+  const form = box.querySelector('form');
+  const err = box.querySelector('[data-err]');
+  const btn = form.querySelector('button[type=submit]');
+  const showErr = (m) => { err.textContent = m; err.classList.remove('hidden'); };
+  document.querySelector('[data-top]')?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => form.querySelector('input[name=name]')?.focus(), 400); });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); err.classList.add('hidden');
+    const f = new FormData(form);
+    const v = (k) => String(f.get(k) ?? '').trim();
+    if (!v('name') || !v('company')) return showErr('이름과 회사를 입력해 주세요.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) return showErr('이메일 주소를 확인해 주세요.');
+    if (!f.get('consent')) return showErr('개인정보 수집 · 이용에 동의해 주세요.');
+    const q = new URLSearchParams(location.search);
+    const source = [q.get('utm_source'), q.get('utm_medium'), q.get('utm_campaign')].filter(Boolean).join(' / ') || document.referrer.replace(/^https?:\/\//, '').split('/')[0] || 'direct';
+    btn.disabled = true; btn.textContent = '보내는 중…';
+    try {
+      const r = await fetch(GUIDE_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: v('name'), company: v('company'), email: v('email'), job_title: v('job_title'), team_size: v('team_size'), consent: true, marketing: !!f.get('marketing'), website: v('website'), source }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.message || '잠시 후 다시 시도해 주세요.');
+      if (j.url) done.querySelector('[data-dl]').setAttribute('href', j.url);
+      if (!j.emailed) done.querySelector('[data-done-msg]').innerHTML = '아래 버튼으로 가이드북을 바로 받아 보세요.';
+      try { window.va?.('event', { name: 'guide_request' }); } catch {}
+      box.classList.add('hidden'); done.classList.remove('hidden');
+    } catch (x) {
+      showErr(x instanceof Error ? x.message : '잠시 후 다시 시도해 주세요.');
+      btn.disabled = false; btn.textContent = '가이드북 받기';
+    }
+  });
+</script>
