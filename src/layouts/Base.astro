@@ -2,11 +2,11 @@
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import { BIZ, DEMO, LOGIN, SIGNUP } from '../consts';
-interface Props { title?: string; description?: string; dark?: boolean; article?: boolean }
-const { title, description = '팀장님의 기준으로 팀원 업무를 먼저 피드백하고, 지금 챙길 팀원 · 빨리 내릴 결정 · 숨은 리스크를 골라 드리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false } = Astro.props;
+interface Props { title?: string; description?: string; dark?: boolean; article?: boolean; ogImage?: string }
+const { title, description = '팀장님의 기준으로 팀원 업무를 먼저 피드백하고, 지금 챙길 팀원 · 빨리 내릴 결정 · 숨은 리스크를 골라 드리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false, ogImage: ogPath = '/og.png' } = Astro.props;
 const full = title ? `${title} | ATEAM` : 'ATEAM — 팀장님을 위한 개인용 AI, 팀 운영 슈퍼에이전트';
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL('/og.png', Astro.site);
+const ogImage = new URL(ogPath, Astro.site);
 ---
 <!doctype html>
 <html lang="ko">
@@ -28,7 +28,7 @@ const ogImage = new URL('/og.png', Astro.site);
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="ATEAM — 팀장님을 위한 개인용 AI Solution, 팀 운영을 위한 슈퍼에이전트" />
+  <meta property="og:image:alt" content={ogPath === '/og.png' ? 'ATEAM — 팀장님을 위한 개인용 AI Solution, 팀 운영을 위한 슈퍼에이전트' : full} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content={ogImage} />
   <!-- 방문자 통계: Vercel Web Analytics (쿠키 없음 · 개인 식별 안 함). Vercel 프로젝트 > Analytics에서 Enable 해야 집계된다 -->
@@ -45,6 +45,7 @@ const ogImage = new URL('/og.png', Astro.site);
         <a href="/pricing" class="hover:opacity-80">요금</a>
         <a href="/articles/" class="hover:opacity-80">아티클</a>
         <a href="/guidebook" class="hover:opacity-80">가이드북</a>
+        <a href="/test" class="hover:opacity-80">팀장 유형 테스트</a>
         <a href={DEMO} class="hover:opacity-80">데모 신청</a>
       </nav>
       <div class="ml-auto flex items-center gap-2">
@@ -63,7 +64,7 @@ const ogImage = new URL('/og.png', Astro.site);
       <div class="text-sm space-y-2"><b class="block text-slate-200 mb-3">서비스</b>
         <a href="/#features" class="block hover:text-white">기능</a><a href="/pricing" class="block hover:text-white">요금 안내</a><a href={SIGNUP} class="block hover:text-white">14일 무료 체험</a><a href={DEMO} class="block hover:text-white">데모 신청</a><a href={LOGIN} class="block hover:text-white">로그인</a></div>
       <div class="text-sm space-y-2"><b class="block text-slate-200 mb-3">자료 · 정책</b>
-        <a href="/articles/" class="block hover:text-white">팀장 아티클</a><a href="/guidebook" class="block hover:text-white">ATEAM 가이드북</a><a href="/terms" class="block hover:text-white">이용약관</a><a href="/privacy" class="block hover:text-white font-semibold text-slate-300">개인정보처리방침</a><a href="/refund" class="block hover:text-white">환불정책</a></div>
+        <a href="/articles/" class="block hover:text-white">팀장 아티클</a><a href="/guidebook" class="block hover:text-white">ATEAM 가이드북</a><a href="/test" class="block hover:text-white">팀장 유형 테스트</a><a href="/terms" class="block hover:text-white">이용약관</a><a href="/privacy" class="block hover:text-white font-semibold text-slate-300">개인정보처리방침</a><a href="/refund" class="block hover:text-white">환불정책</a></div>
     </div>
     <div class="border-t border-white/10">
       <div class="max-w-6xl mx-auto px-5 py-5 text-xs text-slate-500 leading-relaxed space-y-1">
