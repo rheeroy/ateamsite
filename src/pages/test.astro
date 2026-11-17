@@ -3,9 +3,15 @@
 import Base from '../layouts/Base.astro';
 import { DEMO } from '../consts';
 ---
-<Base title="나는 어떤 팀장일까? 팀장 유형 테스트" description="15개 상황 질문, 3분. 8가지 팀장 유형 중 나의 유형과 팀원이 보는 나, 빠지기 쉬운 함정까지 알려 드려요." ogImage="/og-test.png" dark>
+<Base title="나는 어떤 팀장일까? 팀장 유형 테스트" description="15개 상황 질문, 3분. 8가지 팀장 유형 중 나의 유형과 팀원이 보는 나, 빠지기 쉬운 함정까지 알려 드려요." ogImage="/og-test.png" bare>
 <div id="tt" data-demo={DEMO}>
-<div class="wrap" style="padding-top:44px">
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="/" aria-label="ATEAM 홈">
+      <span class="mk" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M4 20 L13 6"/><path d="M13 6 L20 6"/></svg></span>
+      ATEAM
+    </a>
+  </header>
 
   <!-- INTRO -->
   <section id="intro">
@@ -365,7 +371,7 @@ import { DEMO } from '../consts';
 
   function show(id){
     ['intro','quiz','result'].forEach(function(s){ $(s).classList.toggle('hidden', s!==id); });
-    var top=document.getElementById('tt').getBoundingClientRect().top+window.scrollY-64; window.scrollTo(0, top>0?top:0);
+    var top=document.getElementById('tt').getBoundingClientRect().top+window.scrollY; window.scrollTo(0, top>0?top:0);
   }
 
   function renderQ(){
