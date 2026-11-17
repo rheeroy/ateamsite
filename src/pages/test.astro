@@ -3,10 +3,10 @@
 import Base from '../layouts/Base.astro';
 import { DEMO } from '../consts';
 ---
-<Base title="나는 어떤 팀장일까? 팀장 유형 테스트" description="15개 상황 질문, 3분. 8가지 팀장 유형 중 나의 유형과 팀원이 보는 나, 빠지기 쉬운 함정까지 알려 드려요." ogImage="/og-test.png" bare>
+<Base title="나는 어떤 팀장일까? 팀장 유형 테스트" description="15개 상황 질문, 3분. 8가지 팀장 유형 중 나의 유형과 팀원이 보는 나, 빠지기 쉬운 함정까지 알려 드려요." ogImage="/og-test.png" dark noFooter>
 <div id="tt" data-demo={DEMO}>
 <div class="wrap">
-  <header class="top">
+  <header class="top hidden" id="ttLogo">
     <a class="logo" href="/" aria-label="ATEAM 홈">
       <span class="mk" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M4 20 L13 6"/><path d="M13 6 L20 6"/></svg></span>
       ATEAM
@@ -135,7 +135,7 @@ import { DEMO } from '../consts';
 #tt .sigt{font-size:14px;font-weight:800;color:#FF9AA5;margin-bottom:10px}
 #tt .sig{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.55;color:#F3DDE3;padding:5px 0}
 #tt .chk{width:18px;height:18px;border-radius:5px;border:2px solid #FF8E9A;flex-shrink:0;margin-top:2px}
-#tt .hidden{display:none}
+#tt .hidden,#tt header.top.hidden{display:none}
 @media (max-width:480px){#tt h1{font-size:34px}
 #tt .types{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 #tt .tcard svg{width:64px;height:64px}
@@ -371,6 +371,10 @@ import { DEMO } from '../consts';
 
   function show(id){
     ['intro','quiz','result'].forEach(function(s){ $(s).classList.toggle('hidden', s!==id); });
+    // 시작 화면에서만 사이트 상단 메뉴를 보이고, 질문 · 결과 화면에서는 숨겨 몰입하게 한다
+    var sh = document.getElementById('site-header');
+    if(sh) sh.style.display = (id==='intro') ? '' : 'none';
+    $('ttLogo').classList.toggle('hidden', id==='intro');
     var top=document.getElementById('tt').getBoundingClientRect().top+window.scrollY; window.scrollTo(0, top>0?top:0);
   }
 
