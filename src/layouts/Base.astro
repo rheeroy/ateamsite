@@ -2,8 +2,9 @@
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import { BIZ, DEMO, LOGIN, SIGNUP } from '../consts';
-interface Props { title?: string; description?: string; dark?: boolean; article?: boolean; ogImage?: string }
-const { title, description = '팀장님의 기준으로 팀원 업무를 먼저 피드백하고, 지금 챙길 팀원 · 빨리 내릴 결정 · 숨은 리스크를 골라 드리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false, ogImage: ogPath = '/og.png' } = Astro.props;
+interface Props { title?: string; description?: string; dark?: boolean; article?: boolean; ogImage?: string; bare?: boolean; noFooter?: boolean }
+const { title, description = '팀장님의 기준으로 팀원 업무를 먼저 피드백하고, 지금 챙길 팀원 · 빨리 내릴 결정 · 숨은 리스크를 골라 드리는 팀운영 슈퍼에이전트. 팀장 1명 구독, 팀원은 무료 초대, 14일 무료 체험.', dark = false, article = false, ogImage: ogPath = '/og.png', bare = false, noFooter = false } = Astro.props;
+// bare: 헤더 · 푸터 없이 본문만 / noFooter: 푸터만 숨김 (팀장 유형 테스트)
 const full = title ? `${title} | ATEAM` : 'ATEAM — 팀장님을 위한 개인용 AI, 팀 운영 슈퍼에이전트';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(ogPath, Astro.site);
@@ -36,7 +37,8 @@ const ogImage = new URL(ogPath, Astro.site);
   <script is:inline defer src="/_vercel/insights/script.js"></script>
 </head>
 <body class="bg-white text-slate-900">
-  <header class={`sticky top-0 z-40 backdrop-blur ${dark ? 'bg-ink/95 text-white border-b border-white/10' : 'bg-white/85 border-b border-slate-200'}`}>
+  {!bare && (
+  <header id="site-header" class={`sticky top-0 z-40 backdrop-blur ${dark ? 'bg-ink/95 text-white border-b border-white/10' : 'bg-white/85 border-b border-slate-200'}`}>
     <div class="max-w-6xl mx-auto px-5 h-16 flex items-center gap-6">
       <a href="/" aria-label="ATEAM 홈"><Logo /></a>
       <nav class={`hidden md:flex items-center gap-6 text-[14.5px] ${dark ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -54,7 +56,9 @@ const ogImage = new URL(ogPath, Astro.site);
       </div>
     </div>
   </header>
+  )}
   <main><slot /></main>
+  {!bare && !noFooter && (
   <footer class="bg-ink text-slate-400">
     <div class="max-w-6xl mx-auto px-5 py-12 grid gap-8 md:grid-cols-[1.5fr_1fr_1fr]">
       <div class="space-y-3">
@@ -74,5 +78,6 @@ const ogImage = new URL(ogPath, Astro.site);
       </div>
     </div>
   </footer>
+  )}
 </body>
 </html>
