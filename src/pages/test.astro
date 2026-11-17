@@ -1,0 +1,475 @@
+---
+// 팀장 유형 테스트 (leada.team/test) — 15문항 · 8유형 · 유형별 함정(Derailer). 결과는 #t-코드 해시로 공유된다. 응답은 저장하지 않는다
+import Base from '../layouts/Base.astro';
+import { DEMO } from '../consts';
+---
+<Base title="나는 어떤 팀장일까? 팀장 유형 테스트" description="15개 상황 질문, 3분. 8가지 팀장 유형 중 나의 유형과 팀원이 보는 나, 빠지기 쉬운 함정까지 알려 드려요." ogImage="/og-test.png" dark>
+<div id="tt" data-demo={DEMO}>
+<div class="wrap" style="padding-top:44px">
+
+  <!-- INTRO -->
+  <section id="intro">
+    <span class="pill">팀장 유형 테스트 · 3분</span>
+    <h1>나는 어떤 팀장일까?<br><span class="grad">8가지 팀장 유형</span></h1>
+    <p class="lead">15개의 상황 질문에 솔직하게 답해 보세요.<br>나의 팀장 유형과 팀원이 보는 나, 그리고 빠지기 쉬운 함정까지 알려드려요.</p>
+    <div style="margin-top:28px"><button class="btn btn-primary btn-block" id="startBtn" type="button">테스트 시작하기</button></div>
+    <div class="meta"><span>질문 15개</span><span>·</span><span>약 3분</span><span>·</span><span>회원가입 없음</span></div>
+    <p class="sect-title">이런 유형이 있어요</p>
+    <div class="types" id="typeGrid"></div>
+    <div class="foot">상황적 리더십 이론(지시 · 지지 행동)과 경쟁가치모형(안정 · 변화 지향) 등 리더십 연구, 그리고 조직 컨설팅 현장에서 본 리더 행동 패턴을 바탕으로 ATEAM이 만든 자기점검용 테스트예요. 우열을 가리는 평가가 아니라, 내 스타일을 돌아보는 출발점으로 봐 주세요.</div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="qnum"><span id="qCount">1 / 15</span><span id="qAxis"></span></div>
+    <div class="progress"><i id="qBar" style="width:0%"></i></div>
+    <div class="qtext" id="qText"></div>
+    <button class="opt" id="optA" type="button"><span class="k">A</span><span id="optAText"></span></button>
+    <button class="opt" id="optB" type="button"><span class="k">B</span><span id="optBText"></span></button>
+    <button class="back" id="backBtn" type="button">← 이전 질문</button>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="hidden"></section>
+</div>
+<div class="toast" id="toast">링크를 복사했어요</div>
+</div>
+</Base>
+<style is:global>
+#tt{
+  --bg:#0A0A18; --bg2:#14112B; --card:#17152E; --line:#2C2850;
+  --text:#FFFFFF; --sub:#B9B6D3; --mute:#8C88AE;
+  --p1:#7B7BFF; --p2:#C77DFF; --brand:#5B4BFF;
+}
+#tt *{box-sizing:border-box}
+#tt{margin:0;padding:0}
+#tt{
+  
+  color:var(--text);
+  background:
+    radial-gradient(900px 600px at 0% 0%, #3A1D6E 0%, transparent 60%),
+    radial-gradient(800px 700px at 100% 60%, #241A6B 0%, transparent 60%),
+    var(--bg);
+  
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-0.2px;
+}
+#tt .wrap{max-width:640px;margin:0 auto;padding:28px 22px 64px}
+#tt header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
+#tt .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:#fff;text-decoration:none}
+#tt .logo .mk{width:34px;height:34px;border-radius:9px;background:var(--brand);display:flex;align-items:center;justify-content:center}
+#tt .pill{display:inline-block;border:1px solid #4A4380;background:rgba(91,75,255,.12);color:#DCD9FF;border-radius:999px;padding:9px 18px;font-size:15px;font-weight:500}
+#tt h1{font-size:44px;line-height:1.22;font-weight:900;margin:22px 0 0;letter-spacing:-1.5px}
+#tt .grad{background:linear-gradient(90deg,var(--p1),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+#tt .lead{color:var(--sub);font-size:17px;line-height:1.65;margin:18px 0 0}
+#tt .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 28px;border-radius:14px;border:none;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer;text-decoration:none;transition:transform .15s, opacity .15s}
+#tt .btn:active{transform:scale(.98)}
+#tt .btn-primary{background:linear-gradient(90deg,#6B5BFF,#A66BFF);color:#fff;box-shadow:0 10px 30px rgba(107,91,255,.35)}
+#tt .btn-ghost{background:transparent;color:#DCD9FF;border:1px solid #4A4380}
+#tt .btn-block{width:100%}
+#tt .meta{display:flex;gap:16px;color:var(--mute);font-size:14px;margin-top:14px}
+#tt .types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+#tt .tcard{background:rgba(23,21,46,.85);border:1px solid var(--line);border-radius:16px;padding:14px 8px 12px;text-align:center}
+#tt .tcard svg{width:84px;height:84px;display:block;margin:0 auto 10px}
+#tt .tcard .nm{font-size:13px;font-weight:700;line-height:1.3}
+#tt .sect-title{font-size:15px;color:var(--mute);font-weight:600;margin:44px 0 0}
+#tt .foot{color:var(--mute);font-size:12.5px;line-height:1.6;margin-top:48px;border-top:1px solid var(--line);padding-top:18px}
+#tt .foot a{color:#B9B3FF}
+#tt /* quiz */
+.progress{height:6px;background:#221F42;border-radius:99px;overflow:hidden;margin:6px 0 10px}
+#tt .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2));border-radius:99px;transition:width .3s}
+#tt .qnum{color:var(--mute);font-size:14px;font-weight:600;display:flex;justify-content:space-between}
+#tt .qtext{font-size:26px;font-weight:800;line-height:1.42;margin:30px 0 30px;letter-spacing:-.8px;min-height:110px}
+#tt .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);color:#fff;border-radius:16px;padding:20px 20px;font-family:inherit;font-size:17px;line-height:1.55;font-weight:500;cursor:pointer;margin-bottom:12px;transition:border-color .15s, background .15s}
+#tt .opt:hover{border-color:#6B5BFF;background:#1E1A3F}
+#tt .opt .k{display:inline-block;width:26px;height:26px;border-radius:8px;background:#2A2654;color:#C9C3FF;font-size:13px;font-weight:800;text-align:center;line-height:26px;margin-right:10px}
+#tt .back{background:none;border:none;color:var(--mute);font-family:inherit;font-size:15px;cursor:pointer;padding:12px 0;margin-top:6px}
+#tt .back:disabled{opacity:.3;cursor:default}
+#tt /* result */
+.rhead{text-align:center;margin-top:8px}
+#tt .rhead .eyebrow{color:var(--sub);font-size:15px;font-weight:600}
+#tt .rhead svg{width:150px;height:150px;margin:22px auto 6px;display:block;filter:drop-shadow(0 16px 40px rgba(123,91,255,.45))}
+#tt .rhead h2{font-size:38px;font-weight:900;margin:8px 0 0;letter-spacing:-1.2px}
+#tt .rhead .en{color:var(--mute);font-size:14px;font-weight:600;letter-spacing:1px;margin-top:6px}
+#tt .rhead .one{font-size:18px;line-height:1.6;color:#E6E3FF;margin:18px auto 0;max-width:460px}
+#tt .box{background:rgba(23,21,46,.9);border:1px solid var(--line);border-radius:20px;padding:24px 22px;margin-top:16px}
+#tt .box h3{margin:0 0 14px;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+#tt .box h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--p2)}
+#tt .box p{margin:0;color:#DAD7F2;font-size:16px;line-height:1.7}
+#tt .box ul{list-style:disc;margin:0;padding-left:18px;color:#DAD7F2;font-size:16px;line-height:1.75}
+#tt .bars{display:flex;flex-direction:column;gap:16px}
+#tt .bar .lbl{display:flex;justify-content:space-between;font-size:14px;color:var(--sub);font-weight:600;margin-bottom:8px}
+#tt .bar .lbl b{color:#fff}
+#tt .bar .trk{height:10px;background:#221F42;border-radius:99px;position:relative;overflow:hidden}
+#tt .bar .trk i{position:absolute;top:0;bottom:0;left:0;background:linear-gradient(90deg,var(--p1),var(--p2));border-radius:99px}
+#tt .quote{font-size:17px;line-height:1.7;color:#fff;font-weight:600}
+#tt .trap{border-color:#5A3A6E;background:linear-gradient(180deg,rgba(80,36,90,.35),rgba(23,21,46,.9))}
+#tt .trap h3 .dot{background:#FF8A8A}
+#tt .match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#tt .match a{display:flex;align-items:center;gap:10px;background:#1C1939;border:1px solid var(--line);border-radius:14px;padding:12px;text-decoration:none;color:#fff}
+#tt .match a svg{width:40px;height:40px;flex-shrink:0}
+#tt .match small{display:block;color:var(--mute);font-size:12px;font-weight:600}
+#tt .match b{font-size:14px}
+#tt .cta{margin-top:22px;background:linear-gradient(135deg,#2A1E6B,#3B1F66);border:1px solid #5B4BFF;border-radius:22px;padding:26px 22px}
+#tt .cta .t{font-size:20px;font-weight:800;line-height:1.45;margin:0}
+#tt .cta p{color:#DCD9FF;font-size:15.5px;line-height:1.7;margin:12px 0 18px}
+#tt .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+#tt .row .btn{flex:1 1 180px}
+#tt .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#fff;color:#14112B;font-weight:700;font-size:14px;padding:12px 18px;border-radius:12px;opacity:0;transition:opacity .2s;pointer-events:none}
+#tt .toast.on{opacity:1}
+#tt .allbox .tcard{cursor:pointer;text-decoration:none;color:#fff}
+#tt .trapcard{margin-top:16px;border-radius:24px;padding:24px 20px 22px;background:linear-gradient(160deg,#3B1330 0%,#24112F 100%);border:1.5px solid #FF6B7A;box-shadow:0 0 0 6px rgba(255,107,122,.08),0 20px 50px rgba(255,80,110,.15)}
+#tt .trapkicker{display:inline-flex;align-items:center;gap:8px;background:#FF6B7A;color:#1A0B14;font-weight:800;font-size:14px;border-radius:999px;padding:7px 14px 7px 10px}
+#tt .trapname{font-size:30px;font-weight:900;margin-top:16px;letter-spacing:-1px;color:#FFD9DD}
+#tt .trapen{font-size:12.5px;font-weight:700;letter-spacing:1.5px;color:#FF8E9A;margin-top:4px}
+#tt .trapimg{margin:18px 0 0}
+#tt .trapdesc{color:#F3DDE3;font-size:16px;line-height:1.7;margin:16px 0 0}
+#tt .sigs{margin-top:18px;background:rgba(0,0,0,.22);border-radius:16px;padding:16px}
+#tt .sigt{font-size:14px;font-weight:800;color:#FF9AA5;margin-bottom:10px}
+#tt .sig{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.55;color:#F3DDE3;padding:5px 0}
+#tt .chk{width:18px;height:18px;border-radius:5px;border:2px solid #FF8E9A;flex-shrink:0;margin-top:2px}
+#tt .hidden{display:none}
+@media (max-width:480px){#tt h1{font-size:34px}
+#tt .types{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#tt .tcard svg{width:64px;height:64px}
+#tt .tcard .nm{font-size:11.5px}
+#tt .qtext{font-size:22px;min-height:96px}
+#tt .rhead h2{font-size:32px}}
+
+</style>
+<script is:inline>
+
+(function(){
+  // ---------- 일러스트 (사람 캐릭터 · 함정 장면) ----------
+  var INK = '#1F1A4D';
+  var GRAD = {
+    DCV:['#7B7BFF','#C77DFF'], DCS:['#5B8CFF','#7B7BFF'], DcV:['#FF7AB6','#A66BFF'], DcS:['#4F6BFF','#2BB3E0'],
+    dCV:['#B36BFF','#FF8BD1'], dCS:['#FF9A76','#FF6FA8'], dcV:['#33C2B3','#5B8CFF'], dcS:['#8A7BFF','#5B4BFF']
+  };
+  // 사람 한 명: 머리 중심 (0,0), 머리 반지름 17, 몸통은 y 30~70
+  function person(x, y, s, o){
+    o = o || {};
+    var skin = o.skin || '#F3C9A5', hair = o.hair || '#2B2140', shirt = o.shirt || '#FFFFFF';
+    var g = '<g transform="translate('+x+','+y+') scale('+s+')">';
+    if(o.hairStyle==='long') g += '<path d="M-21 2 C-23 -24 23 -24 21 2 L23 30 L-23 30 Z" fill="'+hair+'"/>';
+    g += '<path d="M-34 70 C-34 42 -22 30 0 30 C22 30 34 42 34 70 Z" fill="'+shirt+'"/>';
+    if(o.collar) g += '<path d="M-9 31 L0 44 L9 31" fill="none" stroke="'+o.collar+'" stroke-width="3" stroke-linejoin="round"/>';
+    if(o.tie) g += '<path d="M0 34 L-4 40 L0 58 L4 40 Z" fill="'+o.tie+'"/>';
+    g += '<rect x="-6" y="12" width="12" height="20" rx="5" fill="'+skin+'"/>';
+    g += '<circle cx="0" cy="0" r="17" fill="'+skin+'"/>';
+    var hs = o.hairStyle || 'short';
+    if(hs==='short') g += '<path d="M-18 -1 C-20 -21 -6 -26 4 -24 C15 -23 21 -13 18 -1 C14 -10 5 -13 -5 -12 C-11 -11 -15 -7 -18 -1 Z" fill="'+hair+'"/>';
+    if(hs==='side') g += '<path d="M-18 2 C-21 -20 -4 -27 8 -23 C17 -20 21 -11 18 0 C10 -8 -2 -10 -10 -6 C-14 -4 -16 -1 -18 2 Z" fill="'+hair+'"/>';
+    if(hs==='long') g += '<path d="M-18 -2 C-18 -20 18 -20 18 -2 C10 -12 -2 -12 -12 -6 Z" fill="'+hair+'"/>';
+    if(hs==='bun') g += '<circle cx="0" cy="-22" r="8" fill="'+hair+'"/><path d="M-18 -1 C-19 -19 19 -19 18 -1 C12 -10 -12 -10 -18 -1 Z" fill="'+hair+'"/>';
+    if(hs==='curly') g += '<g fill="'+hair+'"><circle cx="-13" cy="-10" r="7"/><circle cx="-5" cy="-16" r="7"/><circle cx="5" cy="-16" r="7"/><circle cx="13" cy="-10" r="7"/><circle cx="-17" cy="-2" r="5"/><circle cx="17" cy="-2" r="5"/></g>';
+    if(hs==='bald') g += '<path d="M-17 -3 C-17 -6 -15 -8 -13 -8 L-13 2 Z M17 -3 C17 -6 15 -8 13 -8 L13 2 Z" fill="'+hair+'"/>';
+    var e = o.face || 'smile';
+    if(e==='closed'){ g += '<path d="M-9 1 Q-6 -2 -3 1 M3 1 Q6 -2 9 1" stroke="'+INK+'" stroke-width="2" fill="none" stroke-linecap="round"/>'; }
+    else { g += '<circle cx="-6" cy="1" r="2.2" fill="'+INK+'"/><circle cx="6" cy="1" r="2.2" fill="'+INK+'"/>'; }
+    if(e==='smile'||e==='closed') g += '<path d="M-5 8 Q0 12.5 5 8" stroke="'+INK+'" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if(e==='grin') g += '<path d="M-6 7 Q0 14 6 7 Z" fill="'+INK+'"/>';
+    if(e==='flat') g += '<path d="M-4 9 L4 9" stroke="'+INK+'" stroke-width="2" stroke-linecap="round"/>';
+    if(e==='worry') g += '<path d="M-4 10 Q0 7 4 10" stroke="'+INK+'" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M-9 -5 L-3 -3 M9 -5 L3 -3" stroke="'+INK+'" stroke-width="1.8" stroke-linecap="round"/>';
+    if(e==='determined') g += '<path d="M-4 9 Q0 11 4 9" stroke="'+INK+'" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M-10 -5 L-3 -2 M10 -5 L3 -2" stroke="'+INK+'" stroke-width="2.2" stroke-linecap="round"/>';
+    if(o.blush) g += '<circle cx="-10" cy="6" r="3" fill="#FF8FA3" opacity=".55"/><circle cx="10" cy="6" r="3" fill="#FF8FA3" opacity=".55"/>';
+    if(o.glasses) g += '<g fill="none" stroke="'+INK+'" stroke-width="1.8"><circle cx="-6.5" cy="1" r="5"/><circle cx="6.5" cy="1" r="5"/><path d="M-1.5 1 L1.5 1"/></g>';
+    if(o.sweat) g += '<path d="M20 -8 C20 -8 16 -2 16 1 C16 4 20 4 20 1 C20 -2 20 -8 20 -8 Z" fill="#8FD3FF"/>';
+    if(o.back) g = '<g transform="translate('+x+','+y+') scale('+s+')"><path d="M-34 70 C-34 42 -22 30 0 30 C22 30 34 42 34 70 Z" fill="'+shirt+'"/><rect x="-6" y="12" width="12" height="20" rx="5" fill="'+skin+'"/><circle cx="0" cy="0" r="17" fill="'+hair+'"/>';
+    return g + '</g>';
+  }
+
+  // 유형별 캐릭터 (200x200)
+  var PORTRAIT = {
+    DCV:function(){ return person(100,84,1.9,{hairStyle:'side',shirt:'#FFFFFF',tie:'#5B4BFF',face:'grin',hair:'#3A2A55'})+
+      '<rect x="68" y="22" width="64" height="20" rx="6" fill="'+INK+'"/><path d="M60 42 Q100 54 140 42 L140 48 Q100 60 60 48 Z" fill="'+INK+'"/><path d="M100 26 L102.5 31 L108 31.5 L104 35 L105 40 L100 37.5 L95 40 L96 35 L92 31.5 L97.5 31 Z" fill="#FFD36B"/>'+
+      '<path d="M158 196 L170 38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M170 38 L198 50 L168 62 Z" fill="#FFD36B"/><circle cx="160" cy="168" r="11" fill="#F3C9A5"/>'; },
+    DCS:function(){ return person(100,84,1.9,{hairStyle:'bun',shirt:'#EEF0FF',collar:'#5B8CFF',face:'smile',hair:'#4A3423',skin:'#F6D3B8'})+
+      '<circle cx="150" cy="160" r="24" fill="#fff" stroke="'+INK+'" stroke-width="5"/><rect x="145" y="128" width="10" height="9" rx="2" fill="'+INK+'"/><path d="M150 160 L150 146 M150 160 L160 166" stroke="'+INK+'" stroke-width="4" stroke-linecap="round"/><circle cx="130" cy="176" r="11" fill="#F6D3B8"/>'; },
+    DcV:function(){ return person(110,84,1.9,{hairStyle:'short',shirt:'#FFFFFF',face:'determined',hair:'#1E1630',skin:'#E8B48F'})+
+      '<rect x="78" y="56" width="64" height="10" rx="5" fill="#FF4F7B"/><path d="M142 58 L160 50 L156 64 Z" fill="#FF4F7B"/>'+
+      '<g stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"><path d="M14 92 L46 92"/><path d="M22 112 L50 112"/><path d="M10 132 L44 132"/></g>'+
+      '<path d="M112 150 L100 172 L112 172 L104 194 L128 164 L115 164 L124 150 Z" fill="#FFD36B"/>'; },
+    DcS:function(){ return person(96,84,1.9,{hairStyle:'side',shirt:'#FFFFFF',collar:'#2BB3E0',face:'flat',glasses:true,hair:'#1E1630'})+
+      '<path d="M62 84 A34 34 0 0 1 130 84" fill="none" stroke="'+INK+'" stroke-width="6"/><rect x="56" y="78" width="12" height="20" rx="5" fill="'+INK+'"/><rect x="124" y="78" width="12" height="20" rx="5" fill="'+INK+'"/><path d="M62 96 Q66 112 84 110" fill="none" stroke="'+INK+'" stroke-width="4" stroke-linecap="round"/>'+
+      '<rect x="134" y="122" width="52" height="68" rx="8" fill="#fff" stroke="'+INK+'" stroke-width="4"/><rect x="150" y="116" width="20" height="10" rx="3" fill="'+INK+'"/><g stroke="#2BB3E0" stroke-width="4" stroke-linecap="round" fill="none"><path d="M144 142 L149 147 L157 138"/><path d="M144 160 L149 165 L157 156"/><path d="M144 178 L149 183 L157 174"/></g><g stroke="#C9C6E0" stroke-width="4" stroke-linecap="round"><path d="M162 144 L178 144"/><path d="M162 162 L178 162"/><path d="M162 180 L178 180"/></g>'; },
+    dCV:function(){ return person(96,92,1.8,{hairStyle:'long',shirt:'#FFFFFF',face:'grin',hair:'#5A2E1E',blush:true,skin:'#F6D3B8'})+
+      '<g stroke="#FFE27A" stroke-width="4" stroke-linecap="round"><path d="M156 14 L156 4"/><path d="M180 26 L188 19"/><path d="M132 26 L124 19"/><path d="M188 48 L198 48"/></g>'+
+      '<circle cx="156" cy="44" r="20" fill="#FFE27A"/><rect x="147" y="62" width="18" height="12" rx="3" fill="#fff"/><path d="M150 44 L156 52 L162 44" fill="none" stroke="#E0A800" stroke-width="3" stroke-linecap="round"/>'+
+      '<circle cx="42" cy="168" r="11" fill="#F6D3B8"/><circle cx="150" cy="168" r="11" fill="#F6D3B8"/>'; },
+    dCS:function(){ return person(96,84,1.9,{hairStyle:'curly',shirt:'#FFE3D6',face:'closed',hair:'#2B2140',blush:true,skin:'#E8B48F'})+
+      '<path d="M60 160 L74 200 M132 160 L118 200" stroke="#FF9A76" stroke-width="10" stroke-linecap="round"/>'+
+      '<rect x="126" y="146" width="36" height="34" rx="6" fill="#fff"/><path d="M162 154 C176 154 176 172 162 172" fill="none" stroke="#fff" stroke-width="6"/>'+
+      '<path d="M144 132 C144 132 132 124 132 117 C132 113 135 111 138 111 C141 111 143 113 144 115 C145 113 147 111 150 111 C153 111 156 113 156 117 C156 124 144 132 144 132 Z" fill="#FF4F7B"/>'; },
+    dcV:function(){ return person(100,88,1.9,{hairStyle:'short',shirt:'#E6FFF8',collar:'#33C2B3',face:'smile',hair:'#6B4A2B',skin:'#F3C9A5'})+
+      '<ellipse cx="100" cy="58" rx="54" ry="10" fill="#C89B5F"/><path d="M70 58 C70 32 130 32 130 58 Z" fill="#D9AE72"/><rect x="70" y="48" width="60" height="7" fill="#8A5F2C"/>'+
+      '<g fill="'+INK+'"><rect x="118" y="146" width="22" height="34" rx="9"/><rect x="146" y="146" width="22" height="34" rx="9"/><rect x="136" y="154" width="14" height="10"/></g><circle cx="129" cy="148" r="7" fill="#8FD3FF"/><circle cx="157" cy="148" r="7" fill="#8FD3FF"/>'; },
+    dcS:function(){ return person(100,80,1.9,{hairStyle:'side',shirt:'#FFFFFF',face:'smile',sweat:true,hair:'#1E1630',skin:'#E8B48F'})+
+      '<path d="M128 40 L150 18" stroke="#FFD36B" stroke-width="6" stroke-linecap="round"/><path d="M150 18 L155 13" stroke="#FF8FA3" stroke-width="6" stroke-linecap="round"/>'+
+      '<path d="M36 200 L50 146 L150 146 L164 200 Z" fill="'+INK+'"/><rect x="58" y="154" width="84" height="40" rx="4" fill="#8A7BFF" opacity=".6"/><g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"><path d="M66 164 L100 164"/><path d="M66 174 L120 174"/><path d="M66 184 L92 184"/></g>'+
+      '<g fill="#fff"><rect x="148" y="104" width="38" height="12" rx="3"/><rect x="152" y="90" width="34" height="12" rx="3" opacity=".85"/><rect x="146" y="76" width="36" height="12" rx="3" opacity=".7"/></g>'; }
+  };
+  function portrait(code, size){
+    var g = GRAD[code], id = 'p'+code+Math.random().toString(36).slice(2,7);
+    return '<svg viewBox="0 0 200 200" role="img" aria-label="'+TYPES[code].name+' 캐릭터" width="'+(size||56)+'" height="'+(size||56)+'">'+
+      '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+g[0]+'"/><stop offset="1" stop-color="'+g[1]+'"/></linearGradient>'+
+      '<clipPath id="c'+id+'"><rect x="0" y="0" width="200" height="200" rx="52"/></clipPath></defs>'+
+      '<g clip-path="url(#c'+id+')"><rect width="200" height="200" fill="url(#'+id+')"/><circle cx="170" cy="30" r="60" fill="#fff" opacity=".08"/>'+PORTRAIT[code]()+'</g></svg>';
+  }
+  var badge = portrait;
+
+  // 함정 장면 (320x190)
+  var W = '#FFFFFF', T1 = '#B9B6D3';
+  var TRAPART = {
+    DCV:function(){ return person(160,96,1.05,{hairStyle:'side',face:'worry',sweat:true,tie:'#5B4BFF'})+
+      '<g><circle cx="98" cy="58" r="13" fill="#FFD36B"/><circle cx="122" cy="30" r="13" fill="#7B7BFF"/><circle cx="160" cy="18" r="13" fill="#FF8FA3"/><circle cx="198" cy="30" r="13" fill="#2BB3E0"/><circle cx="222" cy="58" r="13" fill="#A6E3B5"/></g>'+
+      '<path d="M92 82 Q160 -20 228 82" fill="none" stroke="'+W+'" stroke-width="2" stroke-dasharray="4 6" opacity=".5"/>'+
+      '<circle cx="262" cy="150" r="13" fill="#C77DFF"/><path d="M248 120 L256 136 M270 118 L266 134" stroke="'+W+'" stroke-width="3" stroke-linecap="round" opacity=".6"/>'; },
+    DCS:function(){ return '<circle cx="118" cy="120" r="74" fill="#ffffff" opacity=".06" stroke="'+W+'" stroke-width="3" stroke-dasharray="8 8"/>'+
+      '<rect x="78" y="134" width="80" height="40" rx="12" fill="#8C5A9A"/><rect x="70" y="118" width="18" height="56" rx="8" fill="#A06BB0"/><rect x="148" y="118" width="18" height="56" rx="8" fill="#A06BB0"/>'+
+      person(118,92,0.95,{hairStyle:'bun',face:'closed',shirt:'#EEF0FF',skin:'#F6D3B8',hair:'#4A3423'})+
+      '<text x="118" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="'+T1+'">늘 하던 대로</text>'+
+      '<path d="M200 100 L262 70" stroke="'+W+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 10" opacity=".7"/><path d="M282 58 L287 70 L300 71 L290 79 L293 92 L282 85 L271 92 L274 79 L264 71 L277 70 Z" fill="#FFD36B" opacity=".45"/>'; },
+    DcV:function(){ return person(252,92,1.05,{hairStyle:'short',face:'determined',skin:'#E8B48F'})+
+      '<path d="M222 140 L132 150 M222 140 L182 156" stroke="#C9A27A" stroke-width="4" stroke-linecap="round"/>'+
+      person(80,112,0.82,{hairStyle:'long',face:'worry',hair:'#5A2E1E',shirt:'#E7E3FF',sweat:true})+person(150,118,0.82,{hairStyle:'curly',face:'worry',shirt:'#E7E3FF',skin:'#E8B48F'})+
+      '<g><rect x="64" y="66" width="30" height="14" rx="3" fill="none" stroke="'+W+'" stroke-width="2.5"/><rect x="94" y="70" width="4" height="6" fill="'+W+'"/><rect x="67" y="69" width="6" height="8" fill="#FF5A6E"/></g>'+
+      '<g><rect x="134" y="72" width="30" height="14" rx="3" fill="none" stroke="'+W+'" stroke-width="2.5"/><rect x="164" y="76" width="4" height="6" fill="'+W+'"/><rect x="137" y="75" width="5" height="8" fill="#FF5A6E"/></g>'+
+      '<g stroke="'+W+'" stroke-width="3" stroke-linecap="round" opacity=".5"><path d="M290 70 L312 70"/><path d="M294 90 L314 90"/></g>'; },
+    DcS:function(){ return person(84,96,1.1,{hairStyle:'side',face:'flat',glasses:true,collar:'#2BB3E0'})+
+      '<path d="M178 132 L134 168" stroke="#C9A27A" stroke-width="12" stroke-linecap="round"/><circle cx="210" cy="96" r="46" fill="#ffffff" opacity=".12"/><circle cx="210" cy="96" r="46" fill="none" stroke="'+W+'" stroke-width="8"/>'+
+      person(210,92,0.62,{hairStyle:'short',face:'worry',sweat:true,shirt:'#E7E3FF',skin:'#F6D3B8'})+
+      '<g stroke="'+W+'" stroke-width="1.5" opacity=".55"><path d="M250 20 L200 72"/><path d="M276 20 L220 72"/></g><path d="M240 14 L290 14" stroke="'+W+'" stroke-width="5" stroke-linecap="round" opacity=".7"/>'; },
+    dCV:function(){ return person(64,100,0.95,{hairStyle:'long',face:'grin',hair:'#5A2E1E',blush:true,skin:'#F6D3B8'})+
+      '<g stroke="'+W+'" stroke-width="3" stroke-linecap="round" fill="none" opacity=".6"><path d="M120 60 L140 40"/><path d="M120 100 L146 100"/><path d="M120 140 L140 160"/></g>'+
+      person(178,112,0.78,{hairStyle:'short',face:'flat',shirt:'#E7E3FF'})+person(232,104,0.78,{hairStyle:'bun',face:'flat',shirt:'#E7E3FF',skin:'#E8B48F'})+person(286,114,0.78,{hairStyle:'curly',face:'flat',shirt:'#E7E3FF'})+
+      ['178','232','286'].map(function(x,i){ var y=[64,56,66][i]; return '<g><rect x="'+(x-14)+'" y="'+(y-20)+'" width="28" height="26" rx="10" fill="'+W+'"/><text x="'+x+'" y="'+(y-1)+'" text-anchor="middle" font-size="18" font-weight="900" fill="#7B4BFF">?</text></g>'; }).join(''); },
+    dCS:function(){ return person(96,98,1.05,{hairStyle:'curly',face:'worry',skin:'#E8B48F',shirt:'#FFE3D6'})+
+      '<g fill="'+W+'"><rect x="150" y="150" width="72" height="12" rx="2"/><rect x="154" y="136" width="70" height="12" rx="2" opacity=".9"/><rect x="148" y="122" width="72" height="12" rx="2" opacity=".85"/><rect x="156" y="108" width="68" height="12" rx="2" opacity=".8"/><rect x="150" y="94" width="72" height="12" rx="2" opacity=".75"/></g>'+
+      '<g transform="rotate(-12 186 76)"><rect x="150" y="62" width="72" height="30" rx="5" fill="none" stroke="#FF6B7A" stroke-width="3.5"/><text x="186" y="83" text-anchor="middle" font-size="17" font-weight="900" fill="#FF6B7A">보류</text></g>'+
+      '<g transform="translate(270 104)"><path d="M-14 -26 L14 -26 L14 -20 C14 -10 4 -4 4 0 C4 4 14 10 14 20 L14 26 L-14 26 L-14 20 C-14 10 -4 4 -4 0 C-4 -4 -14 -10 -14 -20 Z" fill="none" stroke="'+W+'" stroke-width="3.5"/><path d="M-8 18 L8 18 L0 8 Z" fill="#FFD36B"/></g>'; },
+    dcV:function(){ return person(46,112,0.78,{hairStyle:'long',face:'flat',hair:'#5A2E1E',shirt:'#E7E3FF'})+person(96,116,0.78,{hairStyle:'short',face:'flat',shirt:'#E7E3FF',skin:'#E8B48F'})+person(146,110,0.78,{hairStyle:'bun',face:'flat',shirt:'#E7E3FF'})+
+      '<g fill="#6A4A7A"><rect x="186" y="40" width="22" height="150"/></g><g stroke="#4F3460" stroke-width="2"><path d="M186 70 L208 70"/><path d="M186 100 L208 100"/><path d="M186 130 L208 130"/><path d="M186 160 L208 160"/><path d="M197 40 L197 70"/><path d="M197 100 L197 130"/></g>'+
+      person(264,96,1.0,{back:true,hair:'#6B4A2B',shirt:'#E6FFF8'})+
+      '<g stroke="'+W+'" stroke-width="3" stroke-linecap="round" opacity=".55"><path d="M286 46 L306 30"/><path d="M296 60 L316 52"/></g>'; },
+    dcS:function(){ return person(118,110,1.0,{hairStyle:'side',face:'worry',sweat:true,skin:'#E8B48F'})+
+      '<g fill="#F2D3A5" stroke="#B88A55" stroke-width="2"><rect x="88" y="66" width="60" height="22" rx="3"/><rect x="92" y="44" width="54" height="22" rx="3"/><rect x="86" y="22" width="60" height="22" rx="3"/><rect x="94" y="2" width="50" height="20" rx="3"/></g>'+
+      '<circle cx="84" cy="80" r="8" fill="#E8B48F"/><circle cx="152" cy="80" r="8" fill="#E8B48F"/>'+
+      person(236,118,0.8,{hairStyle:'bun',face:'smile',shirt:'#E7E3FF'})+person(290,122,0.8,{hairStyle:'short',face:'smile',shirt:'#E7E3FF',skin:'#F6D3B8'})+
+      '<g><rect x="214" y="44" width="96" height="30" rx="12" fill="'+W+'"/><path d="M240 74 L236 84 L250 74 Z" fill="'+W+'"/><text x="262" y="64" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5B4BFF">제가 해볼까요?</text></g>'; }
+  };
+  function trapArt(code){
+    var id='t'+code+Math.random().toString(36).slice(2,7);
+    return '<svg viewBox="0 0 320 190" role="img" aria-label="'+TYPES[code].trapName+' 장면" style="width:100%;height:auto;display:block">'+
+      '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4A1838"/><stop offset="1" stop-color="#2A1240"/></linearGradient><clipPath id="c'+id+'"><rect width="320" height="190" rx="18"/></clipPath></defs>'+
+      '<g clip-path="url(#c'+id+')"><rect width="320" height="190" fill="url(#'+id+')"/><rect y="172" width="320" height="18" fill="#000" opacity=".18"/>'+TRAPART[code]()+'</g></svg>';
+  }
+
+  var TYPES = {
+    DCV:{trapName:"과유불급형",trapEn:"BOIL THE OCEAN",signals:["\"이것도 이번에 같이 해 보죠\"가 입버릇이다", "우선순위가 매주 바뀐다", "주말에도 팀 메신저를 확인한다"],
+      name:'비전 캡틴형',en:'VISION CAPTAIN',one:'목표도, 사람도, 변화도 다 챙기는 올라운더. 팀원들이 "이 팀장이랑 뭔가 해보고 싶다"고 느끼게 만드는 사람이에요.',
+      traits:['방향을 분명하게 제시하고 팀을 끌고 간다','팀원 한 명 한 명의 성장에도 진심이다','새로운 시도를 두려워하지 않고 먼저 손든다'],
+      seen:'"우리 팀장님은 에너지가 넘치세요. 근데 가끔 따라가기 숨차요."',
+      trap:'모든 걸 한꺼번에, 완벽하게 하려다 정작 중요한 타이밍을 놓치기 쉬워요. 다 챙기려는 팀장일수록 본인이 먼저 지칩니다.',
+      try:'이번 주 할 일 중 "내가 안 해도 되는 것" 두 가지를 골라 팀원에게 넘겨 보세요.',
+      good:'dcS',hard:'dCS',
+      ateam:'챙길 게 많은 팀장일수록 놓치는 게 생겨요. ATEAM은 성과 · 팀원 · 의사결정에서 지금 봐야 할 것만 먼저 짚어 줘요.'},
+    DCS:{trapName:"현실안주형",trapEn:"RISK AVOIDER",signals:["\"작년에도 이렇게 했어요\"라는 말을 자주 한다", "목표는 늘 무난하게 달성 가능한 선에서 잡는다", "새 제안에 \"일단 나중에 보죠\"라고 답한다"],
+      name:'페이스메이커형',en:'PACEMAKER',one:'목표와 사람을 꾸준히, 균형 있게 챙기는 안정감의 아이콘. 팀이 흔들려도 리듬을 잃지 않게 해 주는 사람이에요.',
+      traits:['계획을 세우고 약속한 일정을 지킨다','팀원 컨디션과 업무 진척을 함께 본다','예측 가능한 운영으로 팀에 안정감을 준다'],
+      seen:'"팀장님이랑 일하면 뭘 해야 할지 헷갈린 적이 없어요."',
+      trap:'안정을 중시하다 보면 쉽게 달성할 수 있는 목표를 잡거나, 익숙한 방식을 고수하게 될 수 있어요. 잘 돌아가는 지금이 오히려 바꿔 볼 때일 수 있어요.',
+      try:'이번 분기 목표 중 하나를 "조금 버거운 수준"으로 올려 보고 팀원 반응을 들어 보세요.',
+      good:'DcV',hard:'dcV',
+      ateam:'꾸준한 팀장에게 필요한 건 "다음 한 수"예요. ATEAM은 쌓인 기록을 보고 팀의 병목과 우선순위를 먼저 제안해요.'},
+    DcV:{trapName:"희생강요형",trapEn:"PEOPLE EATER",signals:["성과 회의는 꼬박꼬박, 1on1은 자주 밀린다", "일 잘하는 한두 명에게 일이 몰려 있다", "퇴사 면담에서 처음 듣는 이야기가 나온다"],
+      name:'돌파형 스프린터',en:'BREAKTHROUGH SPRINTER',one:'어려운 목표일수록 불타오르는 추진력의 끝판왕. 남들이 안 된다고 할 때 길을 뚫어내는 사람이에요.',
+      traits:['높은 목표를 세우고 속도감 있게 밀어붙인다','새로운 방식으로 판을 바꾸는 걸 즐긴다','결정이 빠르고 결과로 말한다'],
+      seen:'"성과는 확실히 나요. 다만 이번 프로젝트 끝나면 좀 쉬고 싶어요."',
+      trap:'단기 성과를 좇다 보면 팀원의 성장과 컨디션이 뒤로 밀리기 쉬워요. 성과는 남았는데 사람이 떠나는 일이 생길 수 있어요.',
+      try:'이번 주 1on1에서 업무 이야기 전에 "요즘 어때요?"부터 물어보세요. 그리고 끝까지 들어 보세요.',
+      good:'dCS',hard:'DcS',
+      ateam:'속도를 내는 팀장일수록 사람 신호를 놓치기 쉬워요. ATEAM은 팀원 컨디션 변화와 칭찬할 타이밍을 먼저 알려 줘요.'},
+    DcS:{trapName:"마이크로매니저형",trapEn:"MICROMANAGER",signals:["팀원 보고서의 문구까지 직접 고친다", "모든 메일 참조에 내가 들어가 있다", "팀원이 \"어떻게 할까요?\"를 자주 묻는다"],
+      name:'정밀 관제형',en:'PRECISION CONTROLLER',one:'계획, 기준, 일정. 빈틈없는 운영으로 실수 없는 팀을 만드는 사람이에요. 이 팀장 손을 거치면 품질이 보장돼요.',
+      traits:['업무 기준과 기한을 명확하게 정해 준다','진행 상황을 세밀하게 파악하고 있다','리스크를 미리 보고 대비한다'],
+      seen:'"꼼꼼하셔서 배우는 건 많아요. 가끔 제 방식대로 해 볼 여지가 있으면 좋겠어요."',
+      trap:'세밀한 관리가 지나치면 팀원은 시키는 것만 하게 돼요. 기준은 지키되 방법까지 정해 주고 있지 않은지 돌아볼 때예요.',
+      try:'다음 업무를 맡길 때 "목적과 기한"만 말하고, 방법은 팀원에게 먼저 제안받아 보세요.',
+      good:'dCV',hard:'DcV',
+      ateam:'진행 상황을 일일이 묻지 않아도 돼요. ATEAM이 과제 흐름과 막힌 곳을 한눈에 보여 주니까요.'},
+    dCV:{trapName:"방향 실종형",trapEn:"OVERLY OPEN",signals:["\"알아서 잘 해 봐요\"라고 자주 말한다", "팀원마다 생각하는 우선순위가 다르다", "회의가 끝나면 \"그래서 뭐 하기로 했지?\"가 나온다"],
+      name:'판 깔아주는 촉진자형',en:'IDEA FACILITATOR',one:'팀원의 아이디어에 날개를 달아 주는 사람. "해 봐요, 책임은 제가 질게요"가 입버릇인 팀장이에요.',
+      traits:['팀원의 의견과 시도를 적극적으로 지지한다','자율적이고 수평적인 분위기를 만든다','새로운 실험에 관대하다'],
+      seen:'"하고 싶은 걸 할 수 있어서 좋아요. 근데 가끔 우리 팀 목표가 뭔지 헷갈려요."',
+      trap:'자율을 존중하다 보면 방향과 기준을 충분히 공유하지 않게 될 수 있어요. 팀원은 "그래서 뭘 하라는 거지?" 하고 있을지도 몰라요.',
+      try:'이번 주 팀 회의를 "우리가 이번 분기에 꼭 해낼 한 가지"를 한 문장으로 정하는 걸로 시작해 보세요.',
+      good:'DcS',hard:'dcS',
+      ateam:'자율적인 팀일수록 방향이 흩어지기 쉬워요. ATEAM은 팀 목표와 각자의 과제가 어떻게 연결되는지 보여 줘요.'},
+    dCS:{trapName:"결정 보류형",trapEn:"DECISION DELAYER",signals:["\"조금만 더 지켜보죠\"를 자주 말한다", "같은 문제로 회의를 여러 번 한다", "어려운 피드백을 평가 시즌까지 미룬다"],
+      name:'든든한 맏형형',en:'TRUSTED ANCHOR',one:'팀원들이 힘들 때 제일 먼저 찾는 사람. 이 팀장 밑에서는 마음 편히 일할 수 있어요.',
+      traits:['팀원 이야기를 잘 들어 주고 공감한다','팀 분위기와 관계를 소중히 여긴다','갈등보다 화합을 먼저 생각한다'],
+      seen:'"팀장님은 진짜 좋은 분이에요. 다만 가끔은 확실하게 정리해 주셨으면 해요."',
+      trap:'좋은 관계를 지키려다 꼭 해야 할 피드백이나 결정을 미루게 될 수 있어요. "좋은 게 좋은 거"가 쌓이면 일 잘하는 팀원이 먼저 지쳐요.',
+      try:'미뤄 둔 피드백 하나를 골라 이번 주 안에 구체적으로 전해 보세요. 사실 · 영향 · 기대 순서로요.',
+      good:'DcV',hard:'DCV',
+      ateam:'말하기 어려운 피드백일수록 근거가 필요해요. ATEAM은 쌓인 업무 기록을 바탕으로 피드백할 포인트를 정리해 줘요.'},
+    dcV:{trapName:"독불장군형",trapEn:"LONE WOLF",signals:["팀원들이 내 일정과 관심사를 잘 모른다", "결정한 내용을 나중에야 공유한다", "회의보다 혼자 하는 게 편하다"],
+      name:'독립 탐험가형',en:'INDEPENDENT EXPLORER',one:'늘 새로운 걸 찾아 나서는 아이디어 뱅크. 팀원에게 간섭하지 않고, 본인도 간섭받지 않는 걸 좋아해요.',
+      traits:['새로운 트렌드와 방식에 누구보다 빠르다','팀원에게 자유를 주고 간섭하지 않는다','혼자서도 성과를 만들어 내는 힘이 있다'],
+      seen:'"팀장님은 늘 뭔가 새로운 걸 하고 계세요. 우리 팀이랑은 어떻게 연결되는지 궁금해요."',
+      trap:'혼자 앞서가다 보면 팀과의 소통과 공유가 줄어들기 쉬워요. 팀원들은 자유롭다고 느끼기보다 방치됐다고 느낄 수 있어요.',
+      try:'요즘 내가 관심 있는 것 하나를 팀 회의에서 10분만 공유하고, 팀원 의견을 들어 보세요.',
+      good:'DCS',hard:'DcS',
+      ateam:'자유롭게 맡기는 팀장일수록 팀 상황이 안 보여요. ATEAM은 따로 묻지 않아도 팀의 흐름을 한 화면에 모아 줘요.'},
+    dcS:{trapName:"나홀로 해결사형",trapEn:"LONE FIXER",signals:["\"그냥 내가 할게요\"를 하루에 몇 번씩 한다", "팀에서 야근하는 사람이 늘 나다", "휴가 중에도 업무 연락을 받는다"],
+      name:'묵묵한 실무 에이스형',en:'WORKING ACE',one:'팀에서 일을 제일 잘하는 사람이 바로 팀장. 말보다 실력으로 보여 주고, 급한 불은 직접 꺼요.',
+      traits:['실무 역량이 뛰어나 팀원들의 롤모델이 된다','말보다 행동으로 솔선수범한다','급한 일은 본인이 직접 해결한다'],
+      seen:'"팀장님이 제일 바쁘세요. 도와드리고 싶은데 뭘 해야 할지 모르겠어요."',
+      trap:'"내가 하는 게 빠르지"가 반복되면 팀장은 점점 바빠지고, 팀원은 성장할 기회를 잃어요. 팀장이 실무에 묶이면 팀 전체를 볼 시간이 사라져요.',
+      try:'이번 주 내가 직접 하려던 일 하나를 팀원에게 맡기고, 결과보다 과정을 함께 돌아봐 주세요.',
+      good:'DCV',hard:'dCV',
+      ateam:'실무에 묶인 팀장에게 가장 필요한 건 팀을 볼 시간이에요. ATEAM은 팀장이 놓친 성과 · 팀원 신호를 대신 모아 짚어 줘요.'}
+  };
+
+  // axis: D 목표 드라이브, C 사람 케어, V 변화 지향 / A = 높은 쪽
+  var Q = [
+    {a:'D',q:'분기 첫 주, 팀 목표를 세울 때 나는',A:'숫자부터 박는다. 목표는 구체적일수록 팀이 움직인다.',B:'큰 방향만 잡고, 세부 목표는 팀원들과 같이 정한다.'},
+    {a:'C',q:'팀원 표정이 며칠째 어둡다.',A:'따로 커피 한잔 하자고 먼저 말을 건다.',B:'업무에 지장이 없다면, 개인 사정은 존중해서 지켜본다.'},
+    {a:'V',q:'회사에서 새로운 협업 툴을 도입한다고 한다.',A:'우리 팀이 먼저 써 보겠다고 손든다.',B:'다른 팀이 써 보는 걸 보고 판단한다.'},
+    {a:'D',q:'마감 3일 전인데 진행률이 60%다.',A:'바로 일정을 다시 쪼개고, 매일 체크인을 잡는다.',B:'다들 알아서 하고 있을 테니 하루 더 지켜본다.'},
+    {a:'C',q:'팀원이 정말 잘한 일이 있다.',A:'그날 바로, 무엇이 좋았는지 구체적으로 칭찬한다.',B:'평가 시즌에 확실히 반영해 주면 된다고 생각한다.'},
+    {a:'V',q:'지금 잘 돌아가는 업무 프로세스가 있다.',A:'잘 돌아가도 더 나은 방법이 없는지 계속 손본다.',B:'잘 돌아가는 건 건드리지 않는 게 원칙이다.'},
+    {a:'D',q:'회의가 30분째 결론 없이 맴돈다.',A:'"그럼 이렇게 갑시다" 하고 내가 정리한다.',B:'충분히 의견이 나올 때까지 조금 더 기다린다.'},
+    {a:'C',q:'1on1을 하면 나는 주로',A:'요즘 어떤지, 커리어 고민부터 묻는다.',B:'업무 진행 상황 위주로 효율적으로 끝낸다.'},
+    {a:'V',q:'팀원이 다소 엉뚱한 아이디어를 냈다.',A:'작게라도 해 보자고 시간을 떼어 준다.',B:'지금 하는 일부터 안정시키고 나중에 보자고 한다.'},
+    {a:'D',q:'팀원에게 새 업무를 맡길 때 나는',A:'기한 · 기준 · 결과물 형태까지 정해서 준다.',B:'목적만 설명하고, 방법은 맡긴다.'},
+    {a:'C',q:'팀원이 실수로 일을 크게 그르쳤다.',A:'수습부터 같이 하고, 사람을 다그치지는 않는다.',B:'원인과 책임을 분명히 짚고 넘어간다.'},
+    {a:'V',q:'내가 생각하는 좋은 팀은',A:'매년 일하는 방식이 조금씩 진화하는 팀',B:'누가 와도 같은 품질이 나오는 팀'},
+    {a:'D',q:'팀 성과가 목표에 못 미치고 있다.',A:'원인을 쪼개 보고 바로 다음 액션을 정한다.',B:'팀원들이 스스로 해법을 찾도록 판을 열어 준다.'},
+    {a:'C',q:'팀 분위기에 대해 나는',A:'분위기는 팀장이 적극적으로 챙겨야 한다고 생각한다.',B:'일이 잘 되면 분위기는 자연스럽게 따라온다고 생각한다.'},
+    {a:'V',q:'연말 팀 회고를 시작할 때 나는',A:'"내년엔 뭘 바꿔 볼까?"부터 묻는다.',B:'"올해 잘 된 걸 어떻게 지킬까?"부터 묻는다.'}
+  ];
+  var AXIS_LABEL = {D:'목표 · 과업', C:'사람 · 관계', V:'변화 · 혁신'};
+
+  var answers = [], cur = 0;
+  var $ = function(id){return document.getElementById(id);};
+  var DEMO_URL = (document.getElementById('tt').getAttribute('data-demo')) || 'https://leada.team/demo';
+
+  // type grid
+  var order = ['DCV','DCS','DcV','DcS','dCV','dCS','dcV','dcS'];
+  $('typeGrid').innerHTML = order.map(function(c){
+    return '<div class="tcard">'+badge(c,56)+'<div class="nm">'+TYPES[c].name+'</div></div>';
+  }).join('');
+
+  function show(id){
+    ['intro','quiz','result'].forEach(function(s){ $(s).classList.toggle('hidden', s!==id); });
+    var top=document.getElementById('tt').getBoundingClientRect().top+window.scrollY-64; window.scrollTo(0, top>0?top:0);
+  }
+
+  function renderQ(){
+    var q = Q[cur];
+    $('qCount').textContent = (cur+1)+' / '+Q.length;
+    $('qAxis').textContent = '';
+    $('qBar').style.width = (cur/Q.length*100)+'%';
+    $('qText').textContent = q.q;
+    $('optAText').textContent = q.A;
+    $('optBText').textContent = q.B;
+    $('backBtn').disabled = cur===0;
+    
+  }
+  function pick(v){
+    answers[cur] = v;
+    if(cur < Q.length-1){ cur++; renderQ(); }
+    else { finish(); }
+  }
+  function scores(){
+    var s = {D:0,C:0,V:0};
+    Q.forEach(function(q,i){ if(answers[i]==='A') s[q.a]++; });
+    return s;
+  }
+  function codeFrom(s){
+    return (s.D>=3?'D':'d')+(s.C>=3?'C':'c')+(s.V>=3?'V':'S');
+  }
+  function finish(){
+    var s = scores();
+    var code = codeFrom(s);
+    var pct = {D:Math.round(s.D/5*100), C:Math.round(s.C/5*100), V:Math.round(s.V/5*100)};
+    try{ location.hash = 't-'+code+'-'+s.D+s.C+s.V; }catch(e){}
+    renderResult(code, pct, true);
+  }
+
+  function renderResult(code, pct, mine){
+    var t = TYPES[code];
+    var bars = pct ? ('<div class="box"><h3><span class="dot"></span>나의 리더십 성향</h3><div class="bars">'+
+      ['D','C','V'].map(function(k){
+        var lo = {D:'자율에 맡김',C:'일 중심',V:'안정 운영'}[k];
+        var hi = {D:'목표 드라이브',C:'사람 케어',V:'변화 추구'}[k];
+        return '<div class="bar"><div class="lbl"><span>'+lo+'</span><b>'+AXIS_LABEL[k]+' '+pct[k]+'%</b><span>'+hi+'</span></div><div class="trk"><i style="width:'+Math.max(pct[k],4)+'%"></i></div></div>';
+      }).join('')+'</div></div>') : '';
+    var html =
+      '<div class="rhead">'+
+        '<div class="eyebrow">'+(mine?'나의 팀장 유형은':'이 팀장 유형은')+'</div>'+
+        badge(code,150)+
+        '<h2 class="grad">'+t.name+'</h2>'+
+        '<div class="en">'+t.en+'</div>'+
+        '<p class="one">'+t.one+'</p>'+
+      '</div>'+
+      bars+
+      '<div class="box"><h3><span class="dot"></span>이런 강점이 있어요</h3><ul>'+t.traits.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+      '<div class="box"><h3><span class="dot"></span>팀원이 보는 나</h3><p class="quote">'+t.seen+'</p></div>'+
+      '<div class="trapcard"><div class="trapkicker"><span class="warn" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A0B14" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 L22 20 L2 20 Z"/><path d="M12 10 L12 14"/><path d="M12 17 L12 17.5"/></svg></span>빠지기 쉬운 함정</div>'+'<div class="trapname">'+t.trapName+'</div><div class="trapen">'+t.trapEn+'</div>'+'<div class="trapimg">'+trapArt(code)+'</div>'+'<p class="trapdesc">'+t.trap+'</p>'+'<div class="sigs"><div class="sigt">이런 모습이 보이면 주의</div>'+t.signals.map(function(x){return '<div class="sig"><span class="chk"></span>'+x+'</div>';}).join('')+'</div></div>'+
+      '<div class="box"><h3><span class="dot"></span>이번 주 딱 하나만 해 본다면</h3><p>'+t.try+'</p></div>'+
+      '<div class="box"><h3><span class="dot"></span>궁합</h3><div class="match">'+
+        '<a href="#t-'+t.good+'">'+badge(t.good,40)+'<span><small>찰떡 파트너</small><b>'+TYPES[t.good].name+'</b></span></a>'+
+        '<a href="#t-'+t.hard+'">'+badge(t.hard,40)+'<span><small>서로 노력이 필요한</small><b>'+TYPES[t.hard].name+'</b></span></a>'+
+      '</div></div>'+
+      '<div class="cta"><p class="t">팀 운영의 모든 걸<br>혼자 감당하기 벅차지 않으세요?</p>'+
+        '<p>'+t.ateam+'</p>'+
+        '<a class="btn btn-primary btn-block" href="'+DEMO_URL+'">ATEAM 데모 신청하기</a></div>'+
+      '<div class="row">'+
+        '<button class="btn btn-ghost" id="shareBtn" type="button">결과 링크 복사</button>'+
+        '<button class="btn btn-ghost" id="retryBtn" type="button">'+(mine?'다시 하기':'나도 테스트하기')+'</button>'+
+      '</div>'+
+      '<div class="box allbox" style="margin-top:28px"><h3><span class="dot"></span>8가지 팀장 유형 모두 보기</h3><div class="types" style="margin-top:0">'+
+        order.map(function(c){return '<a class="tcard" href="#t-'+c+'">'+badge(c,48)+'<div class="nm">'+TYPES[c].name+'</div></a>';}).join('')+
+      '</div></div>'+
+      '<div class="foot">이 테스트는 자기점검용이에요. 같은 팀장도 팀 상황과 팀원에 따라 다른 모습을 보이니, 결과는 "지금의 나"를 돌아보는 출발점으로 활용해 주세요.</div>';
+    $('result').innerHTML = html;
+    show('result');
+    $('shareBtn').onclick = function(){
+      var url = location.href;
+      var done = function(){ var el=$('toast'); el.classList.add('on'); setTimeout(function(){el.classList.remove('on');},1600); };
+      try{
+        navigator.clipboard.writeText(url).then(done, function(){ $('toast').textContent='주소창의 링크를 복사해 주세요'; done(); });
+      }catch(e){ $('toast').textContent='주소창의 링크를 복사해 주세요'; done(); }
+    };
+    $('retryBtn').onclick = start;
+  }
+
+  function start(){
+    answers = []; cur = 0;
+    try{ history.replaceState(null,'',location.pathname); }catch(e){ try{location.hash='';}catch(_){} }
+    show('quiz'); renderQ();
+  }
+
+  function route(){
+    var h = (location.hash||'').replace('#','');
+    var m = h.match(/^t-([Dd][Cc][VS])(?:-([0-5])([0-5])([0-5]))?$/);
+    if(m && TYPES[m[1]]){
+      var pct = m[2]!=null ? {D:+m[2]*20, C:+m[3]*20, V:+m[4]*20} : null;
+      var mine = answers.length===Q.length && codeFrom(scores())===m[1];
+      renderResult(m[1], pct, mine);
+    }
+  }
+
+  $('startBtn').onclick = start;
+  $('optA').onclick = function(){ pick('A'); };
+  $('optB').onclick = function(){ pick('B'); };
+  $('backBtn').onclick = function(){ if(cur>0){ cur--; renderQ(); } };
+  window.addEventListener('hashchange', route);
+  route();
+})();
+
+</script>
